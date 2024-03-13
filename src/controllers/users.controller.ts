@@ -10,10 +10,13 @@ import {
 export const createUserController = async (req: Request, res: Response) => {
     try {
         const userData = req.body;
+        if (!userData) {
+            res.status(401).json({ error: "email or password required." })
+        }
         const result = await createUserService(userData);
-        res.status(200).json({ 
-            message: "successfully", 
-            data: result 
+        res.status(200).json({
+            message: "successfully",
+            data: result
         });
     } catch (error) {
         console.error(error);
@@ -33,7 +36,7 @@ export const getUsersController = async (req: Request, res: Response) => {
 
 export const getUserByIdController = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.id;
+        const userId = req.params.userId;
         const user = await getUserByIdService(userId);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
@@ -47,10 +50,13 @@ export const getUserByIdController = async (req: Request, res: Response) => {
 
 export const updateUserController = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.id;
+        const userId = req.params.userId;
         const userData = req.body;
         const user = await updateUserService(userId, userData);
-        res.json(user);
+        res.json({
+            message: "successfully",
+            updated: user
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
@@ -59,7 +65,7 @@ export const updateUserController = async (req: Request, res: Response) => {
 
 export const deleteUserController = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.id;
+        const userId = req.params.userId;
         await deleteUserService(userId);
         res.json({ message: 'User deleted successfully' });
     } catch (error) {
