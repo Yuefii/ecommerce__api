@@ -33,6 +33,9 @@ export const createProductService = async (productData: {
                     }
                 }
             },
+            include: {
+                images: true
+            }
         });
         return result;
     } catch (error) {
@@ -42,7 +45,11 @@ export const createProductService = async (productData: {
 
 export const getProductService = async () => {
     try {
-        const result = await prisma.products.findMany();
+        const result = await prisma.products.findMany({
+            include: {
+                images: true
+            },
+        });
         return result;
     } catch (error) {
         throw error;
@@ -55,6 +62,9 @@ export const getProductByIdService = async (productId: string) => {
             where: {
                 productId: productId,
             },
+            include: {
+                images: true
+            }
         });
         return result;
     } catch (error) {
@@ -99,6 +109,9 @@ export const updateProductService = async (productId: string, productData: {
                     },
                 },
             },
+            include: {
+                images: true
+            }
         });
         return result;
     } catch (error) {

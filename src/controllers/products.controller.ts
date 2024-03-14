@@ -1,13 +1,34 @@
 import { Request, Response } from "express";
-import { createProductService, deleteProductService, getProductByIdService, getProductService, updateProductService } from "../services/products.services";
+import {
+    createProductService,
+    deleteProductService,
+    getProductByIdService,
+    getProductService,
+    updateProductService
+} from "../services/products.services";
 
 export const createProductController = async (req: Request, res: Response) => {
     try {
         const productData = req.body;
         const result = await createProductService(productData);
+        const response = {
+            product_id: result.productId,
+            nama: result.nama,
+            description: result.description,
+            price: result.price,
+            brand: result.brand,
+            category: result.category,
+            quantity: result.quantity,
+            images: result.images.map(item => ({
+                img_id: item.imgId,
+                color: item.color,
+                colorCode: item.colorCode,
+                img_url: item.url,
+            }))
+        }
         res.status(200).json({
             message: "successfully",
-            data: result
+            data: response
         });
     } catch (error) {
         console.error(error);
@@ -18,7 +39,22 @@ export const createProductController = async (req: Request, res: Response) => {
 export const getProductController = async (req: Request, res: Response) => {
     try {
         const result = await getProductService();
-        res.json(result);
+        const response = result.map(item => ({
+            product_id: item.productId,
+            nama: item.nama,
+            description: item.description,
+            price: item.price,
+            brand: item.brand,
+            category: item.category,
+            quantity: item.quantity,
+            images: item.images.map(item => ({
+                img_id: item.imgId,
+                color: item.color,
+                colorCode: item.colorCode,
+                img_url: item.url,
+            }))
+        }));
+        res.json({ data: response });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
@@ -32,7 +68,22 @@ export const getProductByIdController = async (req: Request, res: Response) => {
         if (!result) {
             return res.status(404).json({ error: 'product not found' });
         }
-        res.json(result);
+        const response = {
+            product_id: result.productId,
+            nama: result.nama,
+            description: result.description,
+            price: result.price,
+            brand: result.brand,
+            category: result.category,
+            quantity: result.quantity,
+            images: result.images.map(item => ({
+                img_id: item.imgId,
+                color: item.color,
+                colorCode: item.colorCode,
+                img_url: item.url,
+            }))
+        }
+        res.json({ data: response });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
@@ -44,9 +95,24 @@ export const updateProductController = async (req: Request, res: Response) => {
         const productId = req.params.productId;
         const productData = req.body;
         const result = await updateProductService(productId, productData);
+        const response = {
+            product_id: result.productId,
+            nama: result.nama,
+            description: result.description,
+            price: result.price,
+            brand: result.brand,
+            category: result.category,
+            quantity: result.quantity,
+            images: result.images.map(item => ({
+                img_id: item.imgId,
+                color: item.color,
+                colorCode: item.colorCode,
+                img_url: item.url,
+            }))
+        }
         res.json({
             message: "successfully",
-            updated: result
+            updated: response
         });
     } catch (error) {
         console.error(error);
