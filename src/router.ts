@@ -1,29 +1,41 @@
 import express from 'express';
+
 import {
     createUserController,
     deleteUserController,
     getUserByIdController,
     getUsersController,
+    loginUserController,
     updateUserController
-} from './controllers/users.controller';
+} from './controllers/users.controller'
+
 import {
     createProductController,
     deleteProductController,
     getProductByIdController,
     getProductController,
     updateProductController
-} from './controllers/products.controller';
+} from './controllers/products.controller'
 
 export const router = express.Router()
 
-router.post('/v1/users/register', createUserController);
-router.get('/v1/users', getUsersController);
-router.get('/v1/users/:userId', getUserByIdController);
-router.patch('/v1/users/:userId/update', updateUserController);
-router.delete('/v1/users/:userId/delete', deleteUserController);
+// grouping /v1/users
+const usersRouter = express.Router()
+router.use('/v1/users', usersRouter)
+// users router
+usersRouter.post('/register', createUserController)
+usersRouter.post('/login', loginUserController)
+usersRouter.get('', getUsersController)
+usersRouter.get('/:userId', getUserByIdController)
+usersRouter.patch('/:userId/update', updateUserController)
+usersRouter.delete('/:userId/delete', deleteUserController)
 
-router.post('/v1/products', createProductController)
-router.get('/v1/products', getProductController)
-router.get('/v1/products/:productId', getProductByIdController)
-router.patch('/v1/products/:productId/update', updateProductController);
-router.delete('/v1/products/:productId/delete', deleteProductController);
+// grouping /v1/products
+const productsRouter = express.Router()
+router.use('/v1/products', productsRouter)
+// products router
+productsRouter.post('', createProductController)
+productsRouter.get('', getProductController)
+productsRouter.get('/:productId', getProductByIdController)
+productsRouter.patch('/:productId/update', updateProductController)
+productsRouter.delete('/:productId/delete', deleteProductController)
