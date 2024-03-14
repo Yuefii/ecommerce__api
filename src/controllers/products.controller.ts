@@ -41,7 +41,7 @@ export const getProductController = async (req: Request, res: Response) => {
         const result = await getProductService();
         const response = result.map(item => ({
             product_id: item.productId,
-            nama: item.nama,
+            name: item.nama,
             description: item.description,
             price: item.price,
             brand: item.brand,
@@ -52,6 +52,16 @@ export const getProductController = async (req: Request, res: Response) => {
                 color: item.color,
                 colorCode: item.colorCode,
                 img_url: item.url,
+            })),
+            review: item.review.map(item => ({
+                reviewId: item.reviewId,
+                comment: item.comment,
+                rating: item.rating,
+                user: {
+                    userId: item.users.userId,
+                    nama: item.users.nama,
+                    email: item.users.email
+                }
             }))
         }));
         res.json({ data: response });
@@ -70,7 +80,7 @@ export const getProductByIdController = async (req: Request, res: Response) => {
         }
         const response = {
             product_id: result.productId,
-            nama: result.nama,
+            name: result.nama,
             description: result.description,
             price: result.price,
             brand: result.brand,
@@ -81,6 +91,16 @@ export const getProductByIdController = async (req: Request, res: Response) => {
                 color: item.color,
                 colorCode: item.colorCode,
                 img_url: item.url,
+            })),
+            review: result.review.map(item => ({
+                reviewId: item.reviewId,
+                comment: item.comment,
+                rating: item.rating,
+                user: {
+                    userId: item.users.userId,
+                    nama: item.users.nama,
+                    email: item.users.email
+                }
             }))
         }
         res.json({ data: response });

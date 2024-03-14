@@ -47,7 +47,12 @@ export const getProductService = async () => {
     try {
         const result = await prisma.products.findMany({
             include: {
-                images: true
+                images: true,
+                review: {
+                    include: {
+                        users: true
+                    }
+                },
             },
         });
         return result;
@@ -63,7 +68,12 @@ export const getProductByIdService = async (productId: string) => {
                 productId: productId,
             },
             include: {
-                images: true
+                images: true,
+                review: {
+                    include: {
+                        users: true
+                    }
+                }
             }
         });
         return result;
