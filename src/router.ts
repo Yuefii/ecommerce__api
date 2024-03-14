@@ -16,6 +16,12 @@ import {
     getProductController,
     updateProductController
 } from './controllers/products.controller'
+import { 
+    createReviewController, 
+    deleteReviewController, 
+    getReviewByIdController, 
+    updateReviewController 
+} from './controllers/reviews.controllers';
 
 export const router = express.Router()
 
@@ -35,7 +41,11 @@ const productsRouter = express.Router()
 router.use('/v1/products', productsRouter)
 // products router
 productsRouter.post('', createProductController)
+productsRouter.post('/:productId/review', createReviewController)
 productsRouter.get('', getProductController)
 productsRouter.get('/:productId', getProductByIdController)
+productsRouter.get('/:productId/review', getReviewByIdController)
 productsRouter.patch('/:productId/update', updateProductController)
+productsRouter.patch('/review/:reviewId/update', updateReviewController)
 productsRouter.delete('/:productId/delete', deleteProductController)
+productsRouter.delete('/review/:reviewId/delete', deleteReviewController)
