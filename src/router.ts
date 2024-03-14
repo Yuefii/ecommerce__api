@@ -1,27 +1,8 @@
 import express from 'express';
 
-import {
-    createUserController,
-    deleteUserController,
-    getUserByIdController,
-    getUsersController,
-    loginUserController,
-    updateUserController
-} from './controllers/users.controller'
-
-import {
-    createProductController,
-    deleteProductController,
-    getProductByIdController,
-    getProductController,
-    updateProductController
-} from './controllers/products.controller'
-import { 
-    createReviewController, 
-    deleteReviewController, 
-    getReviewByIdController, 
-    updateReviewController 
-} from './controllers/reviews.controllers';
+import { products } from './controllers/products';
+import { reviews } from './controllers/reviews';
+import { users } from './controllers/users';
 
 export const router = express.Router()
 
@@ -29,23 +10,24 @@ export const router = express.Router()
 const usersRouter = express.Router()
 router.use('/v1/users', usersRouter)
 // users router
-usersRouter.post('/register', createUserController)
-usersRouter.post('/login', loginUserController)
-usersRouter.get('', getUsersController)
-usersRouter.get('/:userId', getUserByIdController)
-usersRouter.patch('/:userId/update', updateUserController)
-usersRouter.delete('/:userId/delete', deleteUserController)
+usersRouter.post('/register', users.createUserController)
+usersRouter.post('/login', users.loginUserController)
+usersRouter.get('', users.getAllUsersController)
+usersRouter.get('/:userId', users.getUserByUserIdController)
+usersRouter.patch('/:userId/update', users.updateUserController)
+usersRouter.delete('/:userId/delete', users.deleteUserController)
 
 // grouping /v1/products
 const productsRouter = express.Router()
 router.use('/v1/products', productsRouter)
 // products router
-productsRouter.post('', createProductController)
-productsRouter.post('/:productId/review', createReviewController)
-productsRouter.get('', getProductController)
-productsRouter.get('/:productId', getProductByIdController)
-productsRouter.get('/:productId/review', getReviewByIdController)
-productsRouter.patch('/:productId/update', updateProductController)
-productsRouter.patch('/review/:reviewId/update', updateReviewController)
-productsRouter.delete('/:productId/delete', deleteProductController)
-productsRouter.delete('/review/:reviewId/delete', deleteReviewController)
+productsRouter.post('', products.createProductController)
+productsRouter.get('', products.getAllProductController)
+productsRouter.get('/:productId', products.getProductByProductIdController)
+productsRouter.patch('/:productId/update', products.updateProductController)
+productsRouter.delete('/:productId/delete', products.deleteProductController)
+// reviews router
+productsRouter.get('/:productId/review', reviews.getReviewByIdController)
+productsRouter.post('/:productId/review', reviews.createReviewController)
+productsRouter.patch('/review/:reviewId/update', reviews.updateReviewController)
+productsRouter.delete('/review/:reviewId/delete', reviews.deleteReviewController)
