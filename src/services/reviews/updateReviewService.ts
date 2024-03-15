@@ -16,7 +16,10 @@ export const updateReviewService = async (reviewId: string, reviewData: {
             data: {
                 comment,
                 rating
-            }
+            },
+            include: {
+                users: true,
+            },
         });
         return result;
     } catch (error) {

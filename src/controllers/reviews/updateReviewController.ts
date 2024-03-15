@@ -6,9 +6,21 @@ export const updateReviewController = async (req: Request, res: Response) => {
         const reviewId = req.params.reviewId;
         const reviewData = req.body;
         const result = await updateReviewService(reviewId, reviewData);
+        const response = {
+            review_id: result.reviewId,
+            product_id: result.productId,
+            rating: result.rating,
+            comment: result.comment,
+            created_at: result.createdAt,
+            user: {
+                user_id: result.users.userId,
+                name: result.users.nama,
+                email: result.users.email
+            }
+        }
         res.json({
             message: "successfully",
-            updated: result
+            updated: response
         });
     } catch (error) {
         console.error(error);
