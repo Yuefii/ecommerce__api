@@ -36,18 +36,18 @@ http://localhost:8080/v1/products/65f452b58109904529f8e820/review
 
 ```bash
 {
-    "reviewId": "65f4af058b58b6115d458490",
-    "userId": "65f4ad7ef9b578d960bcf546",
-    "productId": "65f452b58109904529f8e820",
-    "rating": 5,
-    "comment": "Great product!",
-    "createdAt": "2024-03-15T20:26:45.432Z",
-    "users": {
-        "userId": "65f4ad7ef9b578d960bcf546",
-        "nama": "admin testing",
-        "email": "admin@admin.com",
-        "alamat": "jakarta",
-        "no_telp": "0882288822"
+    "message": "successfully",
+    "data": {
+        "review_id": "65f4b4aa3234b82ac05c6067",
+        "product_id": "65f452b58109904529f8e820",
+        "rating": 5,
+        "comment": "Great product!",
+        "created_at": "2024-03-15T20:50:49.695Z",
+        "user": {
+            "user_id": "65f4ad7ef9b578d960bcf546",
+            "name": "admin testing",
+            "email": "admin@admin.com"
+        }
     }
 }
 ```
@@ -70,15 +70,15 @@ http://localhost:8080/v1/products/65f452b58109904529f8e820/review
 {
     "data": [
         {
-            "review_id": "65f4af058b58b6115d458490",
+            "review_id": "65f4b4aa3234b82ac05c6067",
             "product_id": "65f452b58109904529f8e820",
             "rating": 5,
             "comment": "Great product!",
-            "createdAt": "2024-03-15T20:26:45.432Z",
-            "users": {
+            "created_at": "2024-03-15T20:50:49.695Z",
+            "user": {
                 "user_id": "65f4ad7ef9b578d960bcf546",
                 "name": "admin testing",
-                "email": "admin@admin.com",
+                "email": "admin@admin.com"
             }
         }
     ]
@@ -94,7 +94,7 @@ Example :
 **Endpoint**
 
 ```bash
-http://localhost:8080/v1/products/review/65f4af058b58b6115d458490/update
+http://localhost:8080/v1/products/review/65f4b4aa3234b82ac05c6067/update
 ```
 
 **Request**
@@ -111,11 +111,16 @@ http://localhost:8080/v1/products/review/65f4af058b58b6115d458490/update
 {
     "message": "successfully",
     "updated": {
-        "review_id": "65f4af058b58b6115d458490",
+        "review_id": "65f4b4aa3234b82ac05c6067",
         "product_id": "65f452b58109904529f8e820",
         "rating": 4,
         "comment": "Great product!",
-        "createdAt": "2024-03-15T20:26:45.432Z"
+        "created_at": "2024-03-15T20:50:49.695Z",
+        "user": {
+            "user_id": "65f4ad7ef9b578d960bcf546",
+            "name": "admin testing",
+            "email": "admin@admin.com"
+        }
     }
 }
 ```
@@ -129,7 +134,7 @@ Example :
 **Endpoint**
 
 ```bash
-http://localhost:8080/v1/products/review/65f4af058b58b6115d458490/update
+http://localhost:8080/v1/products/review/65f4b4aa3234b82ac05c6067/update
 ```
 
 **Response**
