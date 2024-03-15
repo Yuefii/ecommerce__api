@@ -4,11 +4,18 @@ import { getUserByUserIdService } from "../../services/users/getUserByUserIdServ
 export const getUserByUserIdController = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
-        const user = await getUserByUserIdService(userId);
-        if (!user) {
+        const result = await getUserByUserIdService(userId);
+        if (!result) {
             return res.status(404).json({ error: 'User not found' });
         }
-        res.json(user);
+        const response = {
+            user_id: result.userId,
+            name: result.nama,
+            email: result.email,
+            address: result.alamat,
+            phone_number: result.no_telp
+        }
+        res.json(response);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

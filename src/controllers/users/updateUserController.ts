@@ -5,10 +5,17 @@ export const updateUserController = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
         const userData = req.body;
-        const user = await updateUserService(userId, userData);
+        const result = await updateUserService(userId, userData);
+        const response = {
+            user_id: result.userId,
+            name: result.nama,
+            email: result.email,
+            address: result.alamat,
+            phone_number: result.no_telp
+        }
         res.json({
             message: "successfully",
-            updated: user
+            updated: response
         });
     } catch (error) {
         console.error(error);
