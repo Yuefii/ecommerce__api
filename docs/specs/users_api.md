@@ -38,11 +38,11 @@ http://localhost:8080/v1/users/register
 {
     "message": "successfully",
     "data": {
-        "userId": "65f4a88d1e4bcf048d8e11f6",
-        "nama": "admin testing",
+        "user_id": "65f4ad7ef9b578d960bcf546",
+        "name": "admin testing",
         "email": "admin@admin.com",
-        "alamat": null,
-        "no_telp": null
+        "address": null,
+        "phone_number": null
     }
 }
 ```
@@ -91,15 +91,17 @@ http://localhost:8080/v1/users
 **Response**
 
 ```bash
-[
-    {
-        "userId": "65f4a88d1e4bcf048d8e11f6",
-        "nama": "admin testing",
-        "email": "admin@admin.com",
-        "alamat": null,
-        "no_telp": null
-    }
-]
+{
+    "data": [
+        {
+            "user_id": "65f4ad7ef9b578d960bcf546",
+            "name": "admin testing",
+            "email": "admin@admin.com",
+            "address": null,
+            "phone_number": null
+        }
+    ]
+}
 ```
 
 ### Endpoints
@@ -118,11 +120,11 @@ http://localhost:8080/v1/users/{userId}
 
 ```bash
 {
-    "userId": "65f4a88d1e4bcf048d8e11f6",
-    "nama": "admin testing",
+    "user_id": "65f4ad7ef9b578d960bcf546",
+    "name": "admin testing",
     "email": "admin@admin.com",
-    "alamat": null,
-    "no_telp": null
+    "address": null,
+    "phone_number": null
 }
 ```
 
@@ -151,11 +153,11 @@ http://localhost:8080/v1/users/{userId}/update
 {
     "message": "successfully",
     "updated": {
-        "userId": "65f4a88d1e4bcf048d8e11f6",
-        "nama": "admin testing",
+        "user_id": "65f4ad7ef9b578d960bcf546",
+        "name": "admin testing",
         "email": "admin@admin.com",
-        "alamat": "jakarta",
-        "no_telp": "0882288822"
+        "address": "jakarta",
+        "phone_number": "0882288822"
     }
 }
 ```
