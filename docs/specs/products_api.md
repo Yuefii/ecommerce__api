@@ -239,3 +239,59 @@ http://localhost:8080/v1/products/65f44cebfdd86ee042819d3b/delete
     "message": "Product deleted successfully"
 }
 ```
+
+### Endpoints
+
+**GET** `/v1/products/search`
+
+Example :
+
+**Endpoint**
+
+```bash
+http://localhost:8080/v1/products/search?keyword=REALME
+```
+
+**Response**
+
+```bash
+[
+    {
+        "productId": "65f452b58109904529f8e820",
+        "nama": "REALME C53 NFC 8/256 & 6/128",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+        "price": 1769000,
+        "brand": "REALME",
+        "category": "Handphone",
+        "quantity": 30
+    }
+]
+```
+
+### Endpoints
+
+**GET** `/v1/products/category`
+
+Example :
+
+**Endpoint**
+
+```bash
+http://localhost:8080/v1/products/category?keyword=Handphone
+```
+
+**Response**
+
+```bash
+[
+    {
+        "productId": "65f452b58109904529f8e820",
+        "nama": "REALME C53 NFC 8/256 & 6/128",
+        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+        "price": 1769000,
+        "brand": "REALME",
+        "category": "Handphone",
+        "quantity": 30
+    }
+]
+```
