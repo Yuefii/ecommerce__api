@@ -23,6 +23,7 @@ router.use('/v1/products', productsRouter)
 // products router
 productsRouter.post('', products.createProductController)
 productsRouter.get('', products.getAllProductController)
+productsRouter.get('/category', products.getProductByCategoryController)
 productsRouter.get('/search', products.getProductBySearchController)
 productsRouter.get('/:productId', products.getProductByProductIdController)
 productsRouter.patch('/:productId/update', products.updateProductController)
