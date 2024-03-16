@@ -249,49 +249,38 @@ Example :
 **Endpoint**
 
 ```bash
-http://localhost:8080/v1/products/search?keyword=REALME
+http://localhost:8080/v1/products/search?keyword=realme
 ```
 
 **Response**
 
 ```bash
-[
-    {
-        "productId": "65f452b58109904529f8e820",
-        "nama": "REALME C53 NFC 8/256 & 6/128",
-        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-        "price": 1769000,
-        "brand": "REALME",
-        "category": "Handphone",
-        "quantity": 30
-    }
-]
-```
-
-### Endpoints
-
-**GET** `/v1/products/category`
-
-Example :
-
-**Endpoint**
-
-```bash
-http://localhost:8080/v1/products/category?keyword=Handphone
-```
-
-**Response**
-
-```bash
-[
-    {
-        "productId": "65f452b58109904529f8e820",
-        "nama": "REALME C53 NFC 8/256 & 6/128",
-        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-        "price": 1769000,
-        "brand": "REALME",
-        "category": "Handphone",
-        "quantity": 30
-    }
-]
+{
+    "data": [
+        {
+            "product_id": "65f5a138513f6bdec3e967d3",
+            "name": "realme c53 nfc 8/256 & 6/128",
+            "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+            "price": 1769000,
+            "brand": "realme",
+            "category": "handphone",
+            "quantity": 30,
+            "images": [
+                {
+                    "img_id": "65f5a138513f6bdec3e967d4",
+                    "color": "Black",
+                    "colorCode": "#000000",
+                    "img_url": "https://down-id.img.susercontent.com/file/id-11134207-7qul5-li36onovrogpc8"
+                },
+                {
+                    "img_id": "65f5a138513f6bdec3e967d5",
+                    "color": "Gold",
+                    "colorCode": "#FFD700",
+                    "img_url": "https://down-id.img.susercontent.com/file/id-11134207-7qula-li36onovrntk5f"
+                }
+            ],
+            "review": []
+        }
+    ]
+}
 ```
