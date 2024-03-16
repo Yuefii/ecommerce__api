@@ -3,6 +3,7 @@ import express from 'express';
 import { products } from './controllers/products';
 import { reviews } from './controllers/reviews';
 import { users } from './controllers/users';
+import { carts } from './controllers/carts';
 
 export const router = express.Router()
 
@@ -32,3 +33,13 @@ productsRouter.get('/:productId/review', reviews.getReviewByIdController)
 productsRouter.post('/:productId/review', reviews.createReviewController)
 productsRouter.patch('/review/:reviewId/update', reviews.updateReviewController)
 productsRouter.delete('/review/:reviewId/delete', reviews.deleteReviewController)
+
+// grouping /v1/carts
+const cartsRouter = express.Router()
+router.use('/v1/carts', cartsRouter)
+// carts router
+cartsRouter.post('', carts.createCartController)
+cartsRouter.get('', carts.getAllCartController)
+cartsRouter.get('/:cartId', carts.getCartByCartIdController)
+cartsRouter.patch('/:cartId/update', carts.updateCartController)
+cartsRouter.delete('/:cartId/delete', carts.deleteCartController)

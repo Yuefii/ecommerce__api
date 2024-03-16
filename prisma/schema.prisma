@@ -21,6 +21,7 @@ model Users {
   alamat   String?
   no_telp  String?
   review   Reviews[]
+  cart     Carts[]
 }
 
 model Products {
@@ -33,6 +34,7 @@ model Products {
   quantity    Int
   images      Images[]
   review      Reviews[]
+  Cart        Carts[]
 }
 
 model Images {
@@ -53,4 +55,15 @@ model Reviews {
   createdAt DateTime @default(now())
   users     Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
   product   Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
+}
+
+model Carts {
+  cartId    String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String    @db.ObjectId
+  productId String    @db.ObjectId
+  quantity  Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  user      Users     @relation(fields: [userId], references: [userId])
+  product   Products  @relation(fields: [productId], references: [productId])
 }
