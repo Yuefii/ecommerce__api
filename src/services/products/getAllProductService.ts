@@ -1,6 +1,6 @@
 import prisma from "../../lib/prisma";
 
-export const getAllProductService = async () => {
+export const getAllProductService = async (offset: number, limit: number) => {
     try {
         const result = await prisma.products.findMany({
             include: {
@@ -11,6 +11,8 @@ export const getAllProductService = async () => {
                     }
                 },
             },
+            skip: offset,
+            take: limit
         });
         return result;
     } catch (error) {

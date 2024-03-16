@@ -1,9 +1,16 @@
 import { Request, Response } from "express";
 import { getAllProductService } from "../../services/products/getAllProductService";
+import { getTotalProducts } from "../../services/products/getTotalProductService";
 
 export const getAllProductController = async (req: Request, res: Response) => {
+    let { page = 1, limit = 10 } = req.query;
     try {
-        const result = await getAllProductService();
+        page = typeof page === 'string' ? page : '1';
+        limit = typeof limit === 'string' ? limit : '10';
+
+        const totalProducts = await getTotalProducts();
+        const offset = (parseInt(page) - 1) * parseInt(limit);
+        const result = await getAllProductService(offset, parseInt(limit));
         const response = result.map(item => ({
             product_id: item.productId,
             name: item.nama,
@@ -19,17 +26,24 @@ export const getAllProductController = async (req: Request, res: Response) => {
                 img_url: item.url,
             })),
             review: item.review.map(item => ({
-                reviewId: item.reviewId,
+                review_id: item.reviewId,
                 comment: item.comment,
                 rating: item.rating,
                 user: {
-                    userId: item.users.userId,
-                    nama: item.users.nama,
+                    user_id: item.users.userId,
+                    name: item.users.nama,
                     email: item.users.email
                 }
             }))
         }));
-        res.json({ data: response });
+        res.json({
+            pagination: {
+                total_products: totalProducts,
+                current_pages: parseInt(page),
+                total_pages: Math.ceil(totalProducts / parseInt(limit)),
+            },
+            data: response
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

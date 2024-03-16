@@ -94,6 +94,11 @@ http://localhost:8080/v1/products
 
 ```bash
 {
+    "pagination": {
+        "total_products": 4,
+        "current_pages": 1,
+        "total_pages": 1
+    },
     "data": [
         {
             "product_id": "65f44cebfdd86ee042819d3b",
