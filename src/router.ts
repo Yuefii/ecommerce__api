@@ -4,6 +4,7 @@ import { products } from './controllers/products';
 import { reviews } from './controllers/reviews';
 import { users } from './controllers/users';
 import { carts } from './controllers/carts';
+import { orders } from './controllers/orders';
 
 export const router = express.Router()
 
@@ -43,3 +44,13 @@ cartsRouter.get('', carts.getAllCartController)
 cartsRouter.get('/:cartId', carts.getCartByCartIdController)
 cartsRouter.patch('/:cartId/update', carts.updateCartController)
 cartsRouter.delete('/:cartId/delete', carts.deleteCartController)
+
+// grouping /v1/orders
+const ordersRouter = express.Router()
+router.use('/v1/orders', ordersRouter)
+// orders router
+ordersRouter.post('', orders.createOrderController)
+ordersRouter.get('', orders.getAllOrderController)
+ordersRouter.get('/:orderId', orders.getOrderByOrderIdController)
+ordersRouter.patch('/:orderId/update', orders.updateOrderController)
+ordersRouter.delete('/:orderId/delete', orders.deleteOrderController)
