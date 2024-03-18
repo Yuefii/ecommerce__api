@@ -1,10 +1,9 @@
 import express from 'express';
-
-import { products } from './controllers/products';
-import { reviews } from './controllers/reviews';
-import { users } from './controllers/users';
-import { carts } from './controllers/carts';
-import { orders } from './controllers/orders';
+import { users } from './features/users/users';
+import { products } from './features/products';
+import { reviews } from './features/reviews';
+import { carts } from './features/carts';
+import { orders } from './features/orders';
 
 export const router = express.Router()
 
