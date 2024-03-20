@@ -33,7 +33,12 @@ export const getProductBySearchController = async (req: Request, res: Response) 
                     nama: item.users.nama,
                     email: item.users.email
                 }
-            }))
+            })),
+            owner: {
+                owner_id: item.owner.userId,
+                name: item.owner.nama,
+                email: item.owner.email
+            }
         }));
         res.status(200).json({ data: response });
     } catch (error) {

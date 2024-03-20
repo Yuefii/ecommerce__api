@@ -31,9 +31,14 @@ export const getProductByProductIdController = async (req: Request, res: Respons
                     nama: item.users.nama,
                     email: item.users.email
                 }
-            }))
+            })),
+            owner: {
+                owner_id: result.owner.userId,
+                name: result.owner.nama,
+                email: result.owner.email
+            }
         }
-        res.json({ data: response });
+        res.status(200).json({ data: response });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

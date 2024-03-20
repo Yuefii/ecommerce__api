@@ -18,6 +18,7 @@ export const getProductBySearchService = async (keyword: any) => {
                         users: true
                     }
                 },
+                owner: true
             }
         });
         return result;

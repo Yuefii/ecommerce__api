@@ -12,7 +12,8 @@ export const getProductByIdService = async (productId: string) => {
                     include: {
                         users: true
                     }
-                }
+                },
+                owner: true
             }
         });
         return result;

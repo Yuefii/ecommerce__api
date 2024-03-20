@@ -18,7 +18,12 @@ export const createProductController = async (req: Request, res: Response) => {
                 color: item.color,
                 colorCode: item.colorCode,
                 img_url: item.url,
-            }))
+            })),
+            owner: {
+                owner_id: result.owner.userId,
+                name: result.owner.nama,
+                email: result.owner.email
+            }
         }
         res.status(200).json({
             message: "successfully",

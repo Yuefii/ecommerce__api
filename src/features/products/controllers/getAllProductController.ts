@@ -25,6 +25,11 @@ export const getAllProductController = async (req: Request, res: Response) => {
                 colorCode: item.colorCode,
                 img_url: item.url,
             })),
+            owner: {
+                owner_id: item.owner.userId,
+                name: item.owner.nama,
+                email: item.owner.email
+            },
             review: item.review.map(item => ({
                 review_id: item.reviewId,
                 comment: item.comment,
@@ -34,9 +39,9 @@ export const getAllProductController = async (req: Request, res: Response) => {
                     name: item.users.nama,
                     email: item.users.email
                 }
-            }))
+            })),
         }));
-        res.json({
+        res.status(200).json({
             pagination: {
                 total_products: totalProducts,
                 current_pages: parseInt(page),

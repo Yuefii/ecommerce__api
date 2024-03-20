@@ -7,6 +7,7 @@ export const createProductService = async (productData: {
     brand: string,
     category: string,
     quantity: number,
+    ownerId: string,
     images: []
 }) => {
     try {
@@ -17,6 +18,7 @@ export const createProductService = async (productData: {
             brand,
             category,
             quantity,
+            ownerId,
             images
         } = productData;
         const result = await prisma.products.create({
@@ -27,14 +29,16 @@ export const createProductService = async (productData: {
                 brand,
                 category,
                 quantity,
+                ownerId,
                 images: {
                     createMany: {
-                        data: images
+                        data: images,
                     }
                 }
             },
             include: {
-                images: true
+                images: true,
+                owner: true
             }
         });
         return result;

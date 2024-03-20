@@ -7,9 +7,10 @@ export const getAllProductService = async (offset: number, limit: number) => {
                 images: true,
                 review: {
                     include: {
-                        users: true
+                        users: true,
                     }
                 },
+                owner: true
             },
             skip: offset,
             take: limit
