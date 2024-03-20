@@ -1,8 +1,12 @@
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import swaggerjsdoc from "swagger-jsdoc"
+import swaggerUi from 'swagger-ui-express'
+
 import express, { Request, Response } from 'express';
 import { router } from './router';
+import { options } from "../docs/swagger/options"
 
 dotenv.config();
 const app = express()
@@ -13,11 +17,14 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 })
 
+// Swagger Docs
+const specs = swaggerjsdoc(options);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
-app.use(router)
+app.use(router);
 
 app.get("/ping", (req: Request, res: Response) => {
     res.status(200).json({
@@ -33,4 +40,3 @@ app.get("/", (req: Request, res: Response) => {
         "version": "1.0.0"
     })
 })
-
