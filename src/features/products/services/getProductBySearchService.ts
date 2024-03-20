@@ -1,6 +1,6 @@
 import prisma from "../../../libs/prisma";
 
-export const getProductBySearchService = async (keyword: any) => {
+export const getProductBySearchService = async (keyword: any, limit: number) => {
     try {
         const result = await prisma.products.findMany({
             where: {
@@ -19,7 +19,8 @@ export const getProductBySearchService = async (keyword: any) => {
                     }
                 },
                 owner: true
-            }
+            },
+            take: limit
         });
         return result;
     } catch (error) {
