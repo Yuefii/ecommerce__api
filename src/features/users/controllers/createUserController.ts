@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { createUserService } from "../services/createUserService";
-import { UserDTO } from "../../../dto/UserDTO";
+import { UserDTO } from "../../../dto/UserDto";
 
 export const createUserController = async (req: Request, res: Response) => {
     try {

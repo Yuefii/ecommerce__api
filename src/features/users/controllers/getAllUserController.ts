@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getAllUsersService } from "../services/getAllUserService";
-import { UserDetailDTO } from "../../../dto/UserDTO";
+import { UserDetailDTO } from "../../../dto/UserDto";
 
 export const getAllUsersController = async (req: Request, res: Response) => {
     try {
