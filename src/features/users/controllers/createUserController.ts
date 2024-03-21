@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { createUserService } from "../services/createUserService";
+import { UserDTO } from "../../../dto/UserDTO";
 
 export const createUserController = async (req: Request, res: Response) => {
     try {
@@ -7,14 +8,8 @@ export const createUserController = async (req: Request, res: Response) => {
         if (!userData) {
             res.status(401).json({ error: "email or password required." })
         }
-        const result = await createUserService(userData);
-        const response = {
-            user_id: result.userId,
-            name: result.nama,
-            email: result.email,
-            address: result.alamat,
-            phone_number: result.no_telp
-        }
+        const user = await createUserService(userData);
+        const response = UserDTO(user)
         res.status(200).json({
             message: "successfully",
             data: response

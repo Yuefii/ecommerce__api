@@ -1,19 +1,12 @@
 import { Request, Response } from "express";
 import { getAllUsersService } from "../services/getAllUserService";
+import { UserDetailDTO } from "../../../dto/UserDTO";
 
 export const getAllUsersController = async (req: Request, res: Response) => {
     try {
-        const result = await getAllUsersService();
-        const response = result.map((item => (
-            {
-                user_id: item.userId,
-                name: item.nama,
-                email: item.email,
-                address: item.alamat,
-                phone_number: item.no_telp
-            }
-        )))
-        res.json({
+        const user = await getAllUsersService();
+        const response = user.map(UserDetailDTO)
+        res.status(200).json({
             data: response
         });
     } catch (error) {

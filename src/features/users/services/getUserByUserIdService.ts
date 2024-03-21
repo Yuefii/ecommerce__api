@@ -6,6 +6,20 @@ export const getUserByUserIdService = async (userId: string) => {
             where: {
                 userId: userId,
             },
+            include: {
+                products: true,
+                review: {
+                    include: {
+                        product: true
+                    }
+                },
+                cart: {
+                    include: {
+                        product: true
+                    }
+                },
+                order: true
+            }
         });
         return result;
     } catch (error) {
