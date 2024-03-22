@@ -10,7 +10,7 @@ export const userRegisterSchema = z.object({
 
 export const userLoginSchema = z.object({
     email: z.string().email().max(100),
-    password: z.string().min(8).max(100),
+    password: z.string().min(5).max(100),
 });
 
 export const userUpdateSchema = z.object({
