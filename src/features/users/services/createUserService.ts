@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt"
 import prisma from "../../../libs/prisma";
+import { ResponseError } from "../../../error/responseError";
 
 export const createUserService = async (userData: {
     nama: string,
@@ -16,6 +17,14 @@ export const createUserService = async (userData: {
             alamat,
             no_telp
         } = userData;
+        const existingUser = await prisma.users.findUnique({
+            where: {
+                email: email
+            }
+        });
+        if (existingUser) {
+            throw new ResponseError("Email already use.", 401);
+        }
         const hashPassword = await bcrypt.hash(password, 12)
         const result = await prisma.users.create({
             data: {
