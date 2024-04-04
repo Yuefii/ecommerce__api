@@ -23,7 +23,7 @@ export const createUserService = async (userData: {
             }
         });
         if (existingUser) {
-            throw new ResponseError("Email already use.", 401);
+            throw new ResponseError("Email already use.", 400);
         }
         const hashPassword = await bcrypt.hash(password, 12)
         const result = await prisma.users.create({

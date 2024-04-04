@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { createUserService } from "../services/createUserService";
 import { UserDTO } from "../../../dto/UserDto";
+import { ResponseError } from "../../../error/responseError";
 
 export const createUserController = async (req: Request, res: Response) => {
     try {
@@ -16,6 +17,10 @@ export const createUserController = async (req: Request, res: Response) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        if (error instanceof ResponseError) {
+            res.status(error.statusCode).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Internal server error' });
+        }
     }
 };
