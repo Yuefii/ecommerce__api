@@ -11,17 +11,17 @@ export const loginUserService = async (userData: {
     try {
         const { email, password } = userData;
         if (!email || !password) {
-            throw new Error
+            throw new ResponseError("email & password not valid", 400)
         }
         const result = await prisma.users.findUnique({
             where: { email },
         });
         if (!result) {
-            throw new Error
+            throw new ResponseError("email doesnt exist", 400)
         }
         const passwordMatch = await bcrypt.compare(password, result.password);
         if (!passwordMatch) {
-            throw new Error
+            throw new ResponseError("password not valid", 400)
         }
         dotenv.config();
         const token = jwt.sign({ userId: result.userId }, process.env.JWT_SECRET || "", {

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { loginUserService } from "../services/loginUserService";
+import { ResponseError } from "../../../error/responseError";
 
 export const loginUserController = async (req: Request, res: Response) => {
     try {
@@ -11,6 +12,10 @@ export const loginUserController = async (req: Request, res: Response) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        if (error instanceof ResponseError) {
+            res.status(error.statusCode).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Internal server error' });
+        }
     }
 }
