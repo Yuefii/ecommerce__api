@@ -147,7 +147,7 @@ http://localhost:8080/v1/users/{userId}/update
 }
 ```
 
-**Endpoint**
+**Response**
 
 ```bash
 {
@@ -159,6 +159,35 @@ http://localhost:8080/v1/users/{userId}/update
         "address": "jakarta",
         "phone_number": "0882288822"
     }
+}
+```
+
+**PUT** `/v1/users/{userId}/change-password`
+
+Example :
+
+**Endpoint**
+
+```bash
+http://localhost:8080/v1/users/{userId}/change-password
+```
+
+**Request**
+
+```bash
+{
+    "currentPassword": "password_lama",
+    "newPassword": "password_baru",
+    "confirmPassword": "password_baru"
+}
+```
+
+**Response**
+
+```bash
+{
+    "message": "successfuly",
+    "statusCode": 200
 }
 ```
 
