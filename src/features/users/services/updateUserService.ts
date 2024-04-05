@@ -2,14 +2,12 @@ import prisma from "../../../libs/prisma";
 
 export const updateUserService = async (userId: string, userData: {
     nama: string,
-    email: string,
     alamat: string,
     no_telp: string
 }) => {
     try {
         const {
             nama,
-            email,
             alamat,
             no_telp
         } = userData;
@@ -19,7 +17,6 @@ export const updateUserService = async (userId: string, userData: {
             },
             data: {
                 nama,
-                email,
                 alamat,
                 no_telp
             },

@@ -10,6 +10,7 @@ export const updateUserController = async (req: Request, res: Response) => {
         const response = UserDTO(user)
         res.json({
             message: "successfully",
+            statusCode: 200,
             updated: response
         });
     } catch (error) {
