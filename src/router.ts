@@ -4,10 +4,10 @@ import { products } from './features/products';
 import { reviews } from './features/reviews';
 import { carts } from './features/carts';
 import { orders } from './features/orders';
-import { 
-    validateUserLogin, 
-    validateUserRegister, 
-    validateUserUpdate 
+import {
+    validateUserLogin,
+    validateUserRegister,
+    validateUserUpdate
 } from './validation/userValidation';
 
 export const router = express.Router()
@@ -21,6 +21,7 @@ usersRouter.post('/login', validateUserLogin, users.loginUserController)
 usersRouter.get('', users.getAllUsersController)
 usersRouter.get('/:userId', users.getUserByUserIdController)
 usersRouter.patch('/:userId/update', validateUserUpdate, users.updateUserController)
+usersRouter.put('/:userId/change-password', users.changePasswordController)
 usersRouter.delete('/:userId/delete', users.deleteUserController)
 
 // grouping /v1/products

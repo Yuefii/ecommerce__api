@@ -1,3 +1,4 @@
+import { changePasswordController } from "./controllers/changePasswordController";
 import { createUserController } from "./controllers/createUserController";
 import { deleteUserController } from "./controllers/deleteUserController";
 import { getAllUsersController } from "./controllers/getAllUserController";
@@ -11,5 +12,6 @@ export const users = {
     loginUserController,
     createUserController,
     updateUserController,
+    changePasswordController,
     deleteUserController
 }
