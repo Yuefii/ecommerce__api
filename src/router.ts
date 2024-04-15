@@ -4,6 +4,7 @@ import { products } from './features/products';
 import { reviews } from './features/reviews';
 import { carts } from './features/carts';
 import { orders } from './features/orders';
+import { UserImageUrl } from './utils/imageUrl';
 import {
     validateUserLogin,
     validateUserRegister,
@@ -11,6 +12,11 @@ import {
 } from './validation/userValidation';
 
 export const router = express.Router()
+
+// grouping img url /public/
+const publicRouter = express.Router()
+router.use('/public', publicRouter)
+publicRouter.get('/public/user/:imageName', UserImageUrl)
 
 // grouping /v1/users
 const usersRouter = express.Router()
@@ -22,6 +28,7 @@ usersRouter.get('', users.getAllUsersController)
 usersRouter.get('/:userId', users.getUserByUserIdController)
 usersRouter.patch('/:userId/update', validateUserUpdate, users.updateUserController)
 usersRouter.put('/:userId/change-password', users.changePasswordController)
+usersRouter.put('/:userId/upload-image', users.uploadImageUserController)
 usersRouter.delete('/:userId/delete', users.deleteUserController)
 
 // grouping /v1/products

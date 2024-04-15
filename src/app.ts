@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import swaggerjsdoc from "swagger-jsdoc"
 import swaggerUi from 'swagger-ui-express'
+import fileUpload from 'express-fileupload';
 
 import express, { Request, Response } from 'express';
 import { router } from './router';
@@ -10,6 +11,7 @@ import { options } from "../docs/swagger/options"
 
 dotenv.config();
 const app = express()
+app.use(fileUpload());
 
 // listening PORT
 const port = process.env.PORT || 8080

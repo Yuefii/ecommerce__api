@@ -18,6 +18,7 @@ model Users {
   nama     String?
   email    String     @unique
   password String
+  imageUrl String?
   alamat   String?
   no_telp  String?
   review   Reviews[]
