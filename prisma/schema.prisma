@@ -25,6 +25,15 @@ model Users {
   cart     Carts[]
   order    Orders[]
   products Products[]
+  history  History[]
+}
+
+model History {
+  historyId     String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId String? @db.ObjectId
+  title         String?
+  category      String?
+  users         Users?  @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model Products {
