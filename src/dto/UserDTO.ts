@@ -13,7 +13,7 @@ export function UserDetailDTO(user: any) {
                     category: userHistory.category,
                 }
             )) : [],
-        products: Array.isArray(user.product) ?
+        products: Array.isArray(user.products) ?
             user.products.map((userProduct: any) => (
                 {
                     product_id: userProduct.productId,

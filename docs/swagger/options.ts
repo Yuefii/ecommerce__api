@@ -1,10 +1,16 @@
 import swaggerJsdoc from "swagger-jsdoc";
 
-import { 
-    getAllProducts, 
-    getProductById, 
-    getProductBySearch 
+import {
+    getAllProducts,
+    getProductById,
+    getProductBySearch
 } from "./paths/products"
+import {
+    loginUser,
+    createUser,
+    getAllUsers,
+    getUserById,
+} from "./paths/users"
 import { detailSchemas } from "./components"
 
 export const options = {
@@ -24,17 +30,20 @@ export const options = {
                 url: "http://localhost:8080/"
             }
         ],
-
         paths: {
             "/v1/products": getAllProducts,
             "/v1/products/{productId}": getProductById,
-            "/v1/products/search": getProductBySearch
+            "/v1/products/search": getProductBySearch,
+            "/v1/users/register": createUser,
+            "/v1/users/login": loginUser,
+            "/v1/users": getAllUsers,
+            "/v1/users/{userId}": getUserById,
         },
         components: {
             schemas: detailSchemas
         }
     },
-    apis: ["./router.ts"]
+    apis: ["./router.ts"],
 };
 
 swaggerJsdoc(options);
