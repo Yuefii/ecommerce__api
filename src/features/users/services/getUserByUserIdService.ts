@@ -18,6 +18,7 @@ export const getUserByUserIdService = async (userId: string) => {
                         product: true
                     }
                 },
+                history: true,
                 order: true
             }
         });

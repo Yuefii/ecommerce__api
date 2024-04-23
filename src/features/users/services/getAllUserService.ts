@@ -15,6 +15,7 @@ export const getAllUsersService = async () => {
                         product: true
                     }
                 },
+                history: true,
                 order: true
             }
         });

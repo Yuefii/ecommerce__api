@@ -1,5 +1,5 @@
 import express from 'express';
-import { users } from './features/users/users';
+import { users } from './features/users';
 import { products } from './features/products';
 import { reviews } from './features/reviews';
 import { carts } from './features/carts';
