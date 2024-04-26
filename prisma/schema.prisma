@@ -14,26 +14,67 @@ datasource db {
 }
 
 model Users {
-  userId   String     @id @default(auto()) @map("_id") @db.ObjectId
-  nama     String?
-  email    String     @unique
-  password String
-  imageUrl String?
-  alamat   String?
-  no_telp  String?
-  review   Reviews[]
-  cart     Carts[]
-  order    Orders[]
-  products Products[]
-  history  History[]
+  userId    String     @id @default(auto()) @map("_id") @db.ObjectId
+  nama      String?
+  email     String     @unique
+  password  String
+  imageUrl  String?
+  alamat    String?
+  no_telp   String?
+  review    Reviews[]
+  reply     Reply[]
+  discus    Discus[]
+  cart      Carts[]
+  order     Orders[]
+  products  Products[]
+  history   History[]
+  createdAt DateTime   @default(now())
+  updateAt  DateTime   @updatedAt
 }
 
 model History {
-  historyId     String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId String? @db.ObjectId
-  title         String?
-  category      String?
-  users         Users?  @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  historyId String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String? @db.ObjectId
+  title     String?
+  category  String?
+
+  // Relational
+  users Users? @relation(fields: [userId], references: [userId], onDelete: Cascade)
+}
+
+model Discus {
+  discusId   String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String?      @db.ObjectId
+  productId  String?      @db.ObjectId
+  message    String
+  discusType DiscusType[]
+  reply      Reply[]
+  createdAt  DateTime     @default(now())
+
+  // Relational
+  Users    Users?    @relation(fields: [userId], references: [userId])
+  Products Products? @relation(fields: [productId], references: [productId])
+}
+
+model Reply {
+  replyId   String   @id @default(auto()) @map("_id") @db.ObjectId
+  discusId  String?  @db.ObjectId
+  userId    String?  @db.ObjectId
+  message   String
+  createdAt DateTime @default(now())
+
+  // Relational
+  Discus Discus? @relation(fields: [discusId], references: [discusId])
+  Users  Users?  @relation(fields: [userId], references: [userId])
+}
+
+model DiscusType {
+  discusTypeId String  @id @default(auto()) @map("_id") @db.ObjectId
+  discusId     String? @db.ObjectId
+  name         String
+
+  // Relational
+  Discus Discus? @relation(fields: [discusId], references: [discusId])
 }
 
 model Products {
@@ -46,19 +87,26 @@ model Products {
   category    String
   quantity    Int
   images      Images[]
+  discus      Discus[]
   review      Reviews[]
   Cart        Carts[]
   OrderItem   OrderItem[]
-  owner       Users       @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
+  createdAt   DateTime    @default(now())
+  updateAt    DateTime    @updatedAt
+
+  // Relational
+  owner Users @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
 }
 
 model Images {
-  imgId     String   @id @default(auto()) @map("_id") @db.ObjectId
+  imgId     String @id @default(auto()) @map("_id") @db.ObjectId
+  productId String @db.ObjectId
   color     String
   colorCode String
   url       String
-  productId String   @db.ObjectId
-  product   Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
+
+  // Relational
+  product Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
 }
 
 model Reviews {
@@ -68,8 +116,11 @@ model Reviews {
   rating    Int
   comment   String
   createdAt DateTime @default(now())
-  users     Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  product   Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
+  updateAt  DateTime @updatedAt
+
+  // Relational
+  users   Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  product Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
 }
 
 model Carts {
@@ -79,18 +130,22 @@ model Carts {
   quantity  Int
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
-  user      Users     @relation(fields: [userId], references: [userId])
-  product   Products  @relation(fields: [productId], references: [productId])
+
+  // Relational
+  user    Users    @relation(fields: [userId], references: [userId])
+  product Products @relation(fields: [productId], references: [productId])
 }
 
 model Orders {
   orderId   String      @id @default(auto()) @map("_id") @db.ObjectId
   userId    String      @db.ObjectId
   status    String
+  items     OrderItem[]
   createdAt DateTime    @default(now())
   updatedAt DateTime?   @updatedAt
-  user      Users       @relation(fields: [userId], references: [userId])
-  items     OrderItem[]
+
+  // Relational
+  user Users @relation(fields: [userId], references: [userId])
 }
 
 model OrderItem {
@@ -102,6 +157,8 @@ model OrderItem {
   subtotal    Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
-  order       Orders    @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
-  product     Products  @relation(fields: [productId], references: [productId])
+
+  // Relational
+  order   Orders   @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  product Products @relation(fields: [productId], references: [productId])
 }

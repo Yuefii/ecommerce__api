@@ -11,6 +11,7 @@ import {
     validateUserUpdate
 } from './validation/userValidation';
 import { history } from './features/history';
+import { discus } from './features/discus';
 
 export const router = express.Router()
 
@@ -51,6 +52,12 @@ productsRouter.get('/:productId/review', reviews.getReviewByIdController)
 productsRouter.post('/:productId/review', reviews.createReviewController)
 productsRouter.patch('/review/:reviewId/update', reviews.updateReviewController)
 productsRouter.delete('/review/:reviewId/delete', reviews.deleteReviewController)
+// reviews router
+productsRouter.get('/:productId/discus', discus.getDiscusByProductIdController)
+productsRouter.post('/:productId/discus', discus.createDiscusController)
+productsRouter.post('/:discusId/discus/reply', discus.createReplyDiscusController)
+productsRouter.delete('/:discusId/discus/delete', discus.deleteDiscusController)
+
 
 // grouping /v1/carts
 const cartsRouter = express.Router()
