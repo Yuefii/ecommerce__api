@@ -29,7 +29,9 @@ export function ProductDTO(product: any) {
                     name: reviewItem.users.nama,
                     email: reviewItem.users.email
                 }
-            })) : []
+            })) : [],
+        created_at: product.createdAt,
+        updated_at: product.updatedAt
     };
 }
 export function ProductUpdateDTO(product: any) {
@@ -46,6 +48,7 @@ export function ProductUpdateDTO(product: any) {
             color: image.color,
             colorCode: image.colorCode,
             img_url: image.url,
-        }))
+        })),
+        updated_at: product.updatedAt
     };
 }

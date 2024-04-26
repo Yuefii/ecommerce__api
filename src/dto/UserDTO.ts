@@ -35,7 +35,9 @@ export function UserDetailDTO(user: any) {
                 name: userCart.product.nama,
                 quantity: userCart.quantity,
                 created_at: userCart.createdAt
-            })) : []
+            })) : [],
+        created_at: user.createdAt,
+        updated_at: user.updatedAt
     }
 }
 
@@ -45,6 +47,7 @@ export function UserDTO(user: any) {
         name: user.nama,
         email: user.email,
         address: user.alamat,
-        phone_number: user.no_telp
+        phone_number: user.no_telp,
+        updated_at: user.updatedAt
     }
 }
