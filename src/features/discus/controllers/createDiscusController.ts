@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { createDiscusService } from "../services/createDiscusService";
+import { DiscusDTO } from "../../../dto/DiscusDto";
 
 export const createDiscusController = async (req: Request, res: Response) => {
     const { productId, userId } = req.params;
@@ -7,22 +8,7 @@ export const createDiscusController = async (req: Request, res: Response) => {
 
     try {
         const result = await createDiscusService(productId, userId, discusData)
-        const response = {
-            discus_id: result.discusId,
-            user_id: result.userId,
-            discus_message: result.message,
-            discus_type: result.discusType.map((item) => ({
-                name: item.name
-            })),
-            discus_reply: result.reply.map((item) => ({
-                discus_id: item.discusId,
-                reply_id: item.replyId,
-                user_id: item.userId,
-                reply_message: item.message,
-                created_at: item.createdAt
-            })),
-            created_at: result.createdAt
-        }
+        const response = DiscusDTO(result)
         res.json({
             message: "successfully",
             data: response
