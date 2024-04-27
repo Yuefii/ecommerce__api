@@ -11,6 +11,12 @@ import {
     getAllUsers,
     getUserById,
 } from "./paths/users"
+import {
+    createDiscus,
+    deleteDiscus,
+    createReplyDiscus,
+    getDiscusByProductId,
+} from "./paths/discus"
 import { detailSchemas } from "./components"
 
 export const options = {
@@ -38,6 +44,11 @@ export const options = {
             "/v1/users/login": loginUser,
             "/v1/users": getAllUsers,
             "/v1/users/{userId}": getUserById,
+            // discus
+            "/v1/products/{productId}/discus": getDiscusByProductId,
+            "/v1/products/{productId}/discus/{userId}": createDiscus,
+            "/v1/products/{discusId}/discus/{userId}/reply": createReplyDiscus,
+            "/v1/products/discus/{discusId}/delete": deleteDiscus,
         },
         components: {
             schemas: detailSchemas
