@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import { createDiscusService } from "../services/createDiscusService";
 
 export const createDiscusController = async (req: Request, res: Response) => {
-    const productId = req.params.productId;
+    const { productId, userId } = req.params;
     const discusData = req.body;
 
     try {
-        const result = await createDiscusService(productId, discusData)
+        const result = await createDiscusService(productId, userId, discusData)
         const response = {
             discus_id: result.discusId,
             user_id: result.userId,
@@ -29,6 +29,9 @@ export const createDiscusController = async (req: Request, res: Response) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(404).json({
+            statusCode: 404,
+            error: "product id & user id not found"
+        });
     }
 };

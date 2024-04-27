@@ -1,11 +1,10 @@
 import prisma from "../../../libs/prisma";
 
-export const createDiscusService = async (productId: string, discusData: {
-    userId: string,
+export const createDiscusService = async (productId: string, userId: string, discusData: {
     message: string,
     discusType: [],
 }) => {
-    const { userId, message, discusType } = discusData;
+    const { message, discusType } = discusData;
     try {
         const result = await prisma.discus.create({
             data: {

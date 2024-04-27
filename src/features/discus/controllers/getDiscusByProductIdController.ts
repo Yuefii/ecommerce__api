@@ -3,7 +3,7 @@ import { getDiscusByProductIdService } from "../services/getDiscusByProductIdSer
 
 export const getDiscusByProductIdController = async (req: Request, res: Response) => {
     try {
-        const productId = req.params.productId
+        const { productId } = req.params
         const result = await getDiscusByProductIdService(productId)
         const response = result.map((item => (
             {
@@ -15,7 +15,6 @@ export const getDiscusByProductIdController = async (req: Request, res: Response
                     name: item.name
                 })),
                 discus_reply: item.reply.map((item) => ({
-                    // discus_id: item.discusId,
                     reply_id: item.replyId,
                     user_id: item.userId,
                     reply_message: item.message,

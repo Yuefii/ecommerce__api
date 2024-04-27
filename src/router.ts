@@ -52,11 +52,11 @@ productsRouter.get('/:productId/review', reviews.getReviewByIdController)
 productsRouter.post('/:productId/review', reviews.createReviewController)
 productsRouter.patch('/review/:reviewId/update', reviews.updateReviewController)
 productsRouter.delete('/review/:reviewId/delete', reviews.deleteReviewController)
-// reviews router
+// discus router
 productsRouter.get('/:productId/discus', discus.getDiscusByProductIdController)
-productsRouter.post('/:productId/discus', discus.createDiscusController)
-productsRouter.post('/:discusId/discus/reply', discus.createReplyDiscusController)
-productsRouter.delete('/:discusId/discus/delete', discus.deleteDiscusController)
+productsRouter.post('/:productId/discus/:userId', discus.createDiscusController)
+productsRouter.post('/:discusId/discus/:userId/reply', discus.createReplyDiscusController)
+productsRouter.delete('/discus/:discusId/delete', discus.deleteDiscusController)
 
 
 // grouping /v1/carts
