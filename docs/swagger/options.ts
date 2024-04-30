@@ -17,6 +17,11 @@ import {
     createReplyDiscus,
     getDiscusByProductId,
 } from "./paths/discus"
+import {
+    createHistory,
+    deleteHistory,
+    getHistoryByUserId
+} from "./paths/history"
 import { detailSchemas } from "./components"
 
 export const options = {
@@ -49,6 +54,10 @@ export const options = {
             "/v1/products/{productId}/discus/{userId}": createDiscus,
             "/v1/products/{discusId}/discus/{userId}/reply": createReplyDiscus,
             "/v1/products/discus/{discusId}/delete": deleteDiscus,
+            // history
+            "/v1/users/{userId}/history": createHistory,
+            "/v1/users/{userId}/historys": getHistoryByUserId,
+            "/v1/users/{userId}/history/delete": deleteHistory,
         },
         components: {
             schemas: detailSchemas

@@ -4,8 +4,26 @@ import {
     product,
     productList,
 } from "./schemas/products"
-import { discusInput, discusReplyInput, discusReplyResponse, discusResponse } from "./schemas/discus"
-import { historyData, loginInput, loginResponse, userData, userDetails, userInput, userResponse, usersList } from "./schemas/users"
+import {
+    discusInput,
+    discusResponse,
+    discusReplyInput,
+    discusReplyResponse,
+} from "./schemas/discus"
+import {
+    historyData,
+    loginInput,
+    loginResponse,
+    userData,
+    userDetails,
+    userInput,
+    userResponse,
+    usersList
+} from "./schemas/users"
+import {
+    historyInput,
+    historyResponse
+} from "./schemas/history"
 
 export const detailSchemas = {
     ProductList: productList,
@@ -24,4 +42,6 @@ export const detailSchemas = {
     DiscusReplyInput: discusReplyInput,
     DiscusResponse: discusResponse,
     DiscusReplyResponse: discusReplyResponse,
+    HistoryInput: historyInput,
+    HistoryResponse: historyResponse,
 }

@@ -34,7 +34,7 @@ usersRouter.put('/:userId/upload-image', users.uploadImageUserController)
 usersRouter.delete('/:userId/delete', users.deleteUserController)
 // history router
 usersRouter.post('/:userId/history', history.createHistoryController)
-usersRouter.get('/:userId/history', history.getHistoryByHistoryIdController)
+usersRouter.get('/:userId/historys', history.getHistoryByHistoryIdController)
 usersRouter.delete('/:historyId/history/delete', history.deleteHistoryController)
 
 // grouping /v1/products
