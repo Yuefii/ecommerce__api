@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "nodemon",
-    "start": "node build/app.js",
+    "start": "node build/src/app.js",
     "build": "tsc"
   },
   "keywords": [],

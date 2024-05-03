@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  mongodb_container:
+    image: prismagraphql/mongo-single-replica:4.4.3-bionic
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      INIT_WAIT_SEC: 3
+    ports:
+      - 27017:27017
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb_container
+    ports:
+      - 8080:8080
+    environment:
+      MONGO_URI: mongodb://admin:admin@localhost:27017/prisma-mongo?authSource=admin&retryWrites=true&w=majority
