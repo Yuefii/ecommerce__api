@@ -51,3 +51,14 @@ export function UserDTO(user: any) {
         updated_at: user.updatedAt
     }
 }
+
+export function UserInfoDTO(user: any) {
+    return {
+        user_id: user.userId,
+        name: user.nama,
+        email: user.email,
+        phone_number: user.no_telp,
+        created_at: user.createdAt,
+        updated_at: user.updatedAt
+    }
+}
