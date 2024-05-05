@@ -1,30 +1,30 @@
-import prisma from "../../../libs/prisma";
+import prisma from '../../../libs/prisma'
 
-export const createDiscusService = async (productId: string, userId: string, discusData: {
-    message: string,
-    discusType: [],
-}) => {
-    const { message, discusType } = discusData;
-    try {
-        const result = await prisma.discus.create({
-            data: {
-                userId: userId,
-                productId: productId,
-                message,
-                discusType: {
-                    createMany: {
-                        data: discusType
-                    }
-                },
-            },
-            include: {
-                discusType: true,
-                reply: true
-            }
-        });
-
-        return result;
-    } catch (error) {
-        throw error
+export const createDiscusService = async (
+  productId: string,
+  userId: string,
+  discusData: {
+    message: string
+    discusType: []
+  }
+) => {
+  const { message, discusType } = discusData
+  const result = await prisma.discus.create({
+    data: {
+      userId: userId,
+      productId: productId,
+      message,
+      discusType: {
+        createMany: {
+          data: discusType
+        }
+      }
+    },
+    include: {
+      discusType: true,
+      reply: true
     }
-};
+  })
+
+  return result
+}

@@ -1,41 +1,47 @@
-import path from "path";
-import dotenv from 'dotenv';
+import path from 'path'
+import dotenv from 'dotenv'
 
-import { Request, Response } from "express";
-import { v4 as uuidv4 } from 'uuid';
-import { UploadedFile } from 'express-fileupload';
-import { uploadImageUserService } from "../services/uploadImageUserService";
+import { Request, Response } from 'express'
+import { v4 as uuidv4 } from 'uuid'
+import { UploadedFile } from 'express-fileupload'
+import { uploadImageUserService } from '../services/uploadImageUserService'
 
-dotenv.config();
-const baseUrl = process.env.BASE_URL + 'public/user/';
+dotenv.config()
+const baseUrl = process.env.BASE_URL + 'public/user/'
 
-export const uploadImageUserController = async (req: Request, res: Response) => {
-    try {
-        if (!req.files || !req.files.imageUrl) {
-            return res.status(400).json({ error: 'No files uploaded.' });
-        }
-
-        if (!req.params) {
-            return res.status(400).json({ error: 'Request params cannot be empty.' });
-        }
-
-        const { userId } = req.params;
-        const imageUrl = req.files.imageUrl as UploadedFile;
-        const fileName = uuidv4() + path.extname(imageUrl.name);
-
-        imageUrl.mv(path.join(__dirname, '../../../../', 'public/user', fileName), async (err) => {
-            if (err) {
-                return res.status(500).json({ error: err });
-            }
-
-            await uploadImageUserService(userId, fileName)
-            res.status(200).json({
-                message: "successfully",
-                imageUrl: baseUrl + fileName
-            });
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+export const uploadImageUserController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    if (!req.files || !req.files.imageUrl) {
+      return res.status(400).json({ error: 'No files uploaded.' })
     }
-};
+
+    if (!req.params) {
+      return res.status(400).json({ error: 'Request params cannot be empty.' })
+    }
+
+    const { userId } = req.params
+    const imageUrl = req.files.imageUrl as UploadedFile
+    const fileName = uuidv4() + path.extname(imageUrl.name)
+
+    imageUrl.mv(
+      path.join(__dirname, '../../../../', 'public/user', fileName),
+      async (err) => {
+        if (err) {
+          return res.status(500).json({ error: err })
+        }
+
+        await uploadImageUserService(userId, fileName)
+        res.status(200).json({
+          message: 'successfully',
+          imageUrl: baseUrl + fileName
+        })
+      }
+    )
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}

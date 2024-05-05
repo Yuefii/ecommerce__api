@@ -1,17 +1,17 @@
-import express from 'express';
-import { users } from './features/users';
-import { products } from './features/products';
-import { reviews } from './features/reviews';
-import { carts } from './features/carts';
-import { orders } from './features/orders';
-import { UserImageUrl } from './utils/imageUrl';
+import express from 'express'
+import { users } from './features/users'
+import { products } from './features/products'
+import { reviews } from './features/reviews'
+import { carts } from './features/carts'
+import { orders } from './features/orders'
+import { UserImageUrl } from './utils/imageUrl'
 import {
-    validateUserLogin,
-    validateUserRegister,
-    validateUserUpdate
-} from './validation/userValidation';
-import { history } from './features/history';
-import { discus } from './features/discus';
+  validateUserLogin,
+  validateUserRegister,
+  validateUserUpdate
+} from './validation/userValidation'
+import { history } from './features/history'
+import { discus } from './features/discus'
 
 export const router = express.Router()
 
@@ -29,14 +29,21 @@ usersRouter.post('/login', validateUserLogin, users.loginUserController)
 usersRouter.get('', users.getAllUsersController)
 usersRouter.get('/search', users.getUserBySearchController)
 usersRouter.get('/:userId', users.getUserByUserIdController)
-usersRouter.patch('/:userId/update', validateUserUpdate, users.updateUserController)
+usersRouter.patch(
+  '/:userId/update',
+  validateUserUpdate,
+  users.updateUserController
+)
 usersRouter.put('/:userId/change-password', users.changePasswordController)
 usersRouter.put('/:userId/upload-image', users.uploadImageUserController)
 usersRouter.delete('/:userId/delete', users.deleteUserController)
 // history router
 usersRouter.post('/:userId/history', history.createHistoryController)
 usersRouter.get('/:userId/historys', history.getHistoryByHistoryIdController)
-usersRouter.delete('/:historyId/history/delete', history.deleteHistoryController)
+usersRouter.delete(
+  '/:historyId/history/delete',
+  history.deleteHistoryController
+)
 
 // grouping /v1/products
 const productsRouter = express.Router()
@@ -52,13 +59,18 @@ productsRouter.delete('/:productId/delete', products.deleteProductController)
 productsRouter.get('/:productId/review', reviews.getReviewByIdController)
 productsRouter.post('/:productId/review', reviews.createReviewController)
 productsRouter.patch('/review/:reviewId/update', reviews.updateReviewController)
-productsRouter.delete('/review/:reviewId/delete', reviews.deleteReviewController)
+productsRouter.delete(
+  '/review/:reviewId/delete',
+  reviews.deleteReviewController
+)
 // discus router
 productsRouter.get('/:productId/discus', discus.getDiscusByProductIdController)
 productsRouter.post('/:productId/discus/:userId', discus.createDiscusController)
-productsRouter.post('/:discusId/discus/:userId/reply', discus.createReplyDiscusController)
+productsRouter.post(
+  '/:discusId/discus/:userId/reply',
+  discus.createReplyDiscusController
+)
 productsRouter.delete('/discus/:discusId/delete', discus.deleteDiscusController)
-
 
 // grouping /v1/carts
 const cartsRouter = express.Router()

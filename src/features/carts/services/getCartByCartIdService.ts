@@ -1,18 +1,14 @@
-import prisma from "../../../libs/prisma";
+import prisma from '../../../libs/prisma'
 
 export const getCartByCartIdService = async (cartId: string) => {
-    try {
-        const result = await prisma.carts.findUnique({
-            where: {
-                cartId: cartId,
-            },
-            include: {
-                product: true,
-                user: true
-            }
-        });
-        return result;
-    } catch (error) {
-        throw error;
+  const result = await prisma.carts.findUnique({
+    where: {
+      cartId: cartId
+    },
+    include: {
+      product: true,
+      user: true
     }
-};
+  })
+  return result
+}
