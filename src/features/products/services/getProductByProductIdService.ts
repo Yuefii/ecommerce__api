@@ -12,6 +12,17 @@ export const getProductByIdService = async (productId: string) => {
           users: true
         }
       },
+      discus: {
+        include: {
+          Users: true,
+          discusType: true,
+          reply: {
+            include: {
+              Users: true
+            }
+          }
+        }
+      },
       owner: true
     }
   })

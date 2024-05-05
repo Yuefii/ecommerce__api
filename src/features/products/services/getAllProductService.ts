@@ -9,6 +9,17 @@ export const getAllProductService = async (offset: number, limit: number) => {
           users: true
         }
       },
+      discus: {
+        include: {
+          Users: true,
+          discusType: true,
+          reply: {
+            include: {
+              Users: true
+            }
+          }
+        }
+      },
       owner: true
     },
     skip: offset,

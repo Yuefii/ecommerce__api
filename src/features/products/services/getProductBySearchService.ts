@@ -20,7 +20,18 @@ export const getProductBySearchService = async (
           users: true
         }
       },
-      owner: true
+      discus: {
+        include: {
+          Users: true,
+          discusType: true,
+          reply: {
+            include: {
+              Users: true
+            }
+          }
+        }
+      },
+      owner: true,
     },
     take: limit
   })
