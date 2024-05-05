@@ -8,8 +8,13 @@ export const getDiscusByProductIdService = async (productId: string) => {
             },
             include: {
                 discusType: true,
-                reply: true
-            }
+                reply: {
+                    include: {
+                        Users: true
+                    }
+                },
+                Users: true
+            },
         })
         return result
     } catch (error) {

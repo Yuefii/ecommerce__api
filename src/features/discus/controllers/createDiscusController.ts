@@ -1,5 +1,5 @@
 import { logger } from "../../../utils/winston";
-import { DiscusDTO } from "../../../dto/DiscusDto";
+import { createDiscusDTO } from "../../../dto/DiscusDto";
 import { Request, Response } from "express";
 import { createDiscusService } from "../services/createDiscusService";
 
@@ -11,7 +11,7 @@ export const createDiscusController = async (req: Request, res: Response) => {
         logger.info(`Received request to create discus for productId : ${productId} & userId : ${userId}`);
 
         const result = await createDiscusService(productId, userId, discusData)
-        const response = DiscusDTO(result)
+        const response = createDiscusDTO(result)
 
         logger.info(`Successfully created discus for productId : ${productId} & userId : ${userId}`);
 
