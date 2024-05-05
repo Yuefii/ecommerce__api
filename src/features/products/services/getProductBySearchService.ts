@@ -31,7 +31,7 @@ export const getProductBySearchService = async (
           }
         }
       },
-      owner: true,
+      owner: true
     },
     take: limit
   })
