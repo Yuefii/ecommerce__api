@@ -22,7 +22,7 @@ export const createDiscusService = async (
     },
     include: {
       discusType: true,
-      reply: true
+      Users: true
     }
   })
 

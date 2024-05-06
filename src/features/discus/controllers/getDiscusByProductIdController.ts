@@ -13,7 +13,8 @@ export const getDiscusByProductIdController = async (
     logger.info(`Received request to get discus for productId : ${productId}`)
 
     const result = await getDiscusByProductIdService(productId)
-    const response = result.map(DiscusDTO)
+    const DTO = new DiscusDTO()
+    const response = result.map((item) => DTO.fromGet(item))
 
     logger.info(`Successfully get discus for productId : ${productId}`)
     res.status(200).json({ data: response })

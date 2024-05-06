@@ -13,6 +13,9 @@ export const createReplyDiscusService = async (
       discusId,
       userId,
       message
+    },
+    include: {
+      Users: true
     }
   })
   return result

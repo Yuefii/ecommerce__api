@@ -1,4 +1,5 @@
 import { logger } from '../../../utils/winston'
+import { DiscusDTO } from '../../../dto/DiscusDto'
 import { Request, Response } from 'express'
 import { createReplyDiscusService } from '../services/createReplyDiscusService'
 
@@ -15,13 +16,15 @@ export const createReplyDiscusController = async (
     )
 
     const result = await createReplyDiscusService(discusId, userId, replyData)
+    const DTO = new DiscusDTO()
+    const response = DTO.fromReply(result)
 
     logger.info(
       `Successfully created discus reply for discusId : ${discusId} & userId : ${userId}`
     )
     res.json({
       message: 'successfully',
-      data: result
+      data: response
     })
   } catch (error: unknown) {
     if (error instanceof Error) {

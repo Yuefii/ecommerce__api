@@ -1,5 +1,5 @@
 import { logger } from '../../../utils/winston'
-import { createDiscusDTO } from '../../../dto/DiscusDto'
+import { DiscusDTO } from '../../../dto/DiscusDto'
 import { Request, Response } from 'express'
 import { createDiscusService } from '../services/createDiscusService'
 
@@ -13,7 +13,8 @@ export const createDiscusController = async (req: Request, res: Response) => {
     )
 
     const result = await createDiscusService(productId, userId, discusData)
-    const response = createDiscusDTO(result)
+    const DTO = new DiscusDTO()
+    const response = DTO.fromCreate(result)
 
     logger.info(
       `Successfully created discus for productId : ${productId} & userId : ${userId}`
