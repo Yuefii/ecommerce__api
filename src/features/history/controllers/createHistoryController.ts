@@ -11,7 +11,8 @@ export const createHistoryController = async (req: Request, res: Response) => {
     logger.info(`Received request to create history for userId ${userId}`)
 
     const result = await createHistoryService(userId, historyData)
-    const response = HistoryDTO(result)
+    const DTO = new HistoryDTO()
+    const response = DTO.fromGet(result)
 
     logger.info(`Successfully created history for userId : ${userId}`)
 

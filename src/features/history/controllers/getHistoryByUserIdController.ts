@@ -13,7 +13,8 @@ export const getHistoryByHistoryIdController = async (
     logger.info(`Received request to get history for userId : ${userId}`)
 
     const result = await getHistoryByUserIdService(userId)
-    const response = result.map(HistoryDTO)
+    const DTO = new HistoryDTO()
+    const response = result.map((item) => DTO.fromGet(item))
 
     logger.info(`Successfully get history for userId : ${userId}`)
 
