@@ -1,16 +1,18 @@
+import { UserDTO } from '../../../dto/UserDto'
 import { Request, Response } from 'express'
 import { getUserByUserIdService } from '../services/getUserByUserIdService'
-import { UserDetailDTO } from '../../../dto/UserDto'
 
 export const getUserByUserIdController = async (
   req: Request,
   res: Response
 ) => {
+  const { userId } = req.params
   try {
-    const userId = req.params.userId
-    const user = await getUserByUserIdService(userId)
-    const response = UserDetailDTO(user)
-    res.status(200).json(response)
+    const result = await getUserByUserIdService(userId)
+    const DTO = new UserDTO()
+    const response = DTO.fromGet(result)
+
+    res.status(200).json({ data: response })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Internal server error' })

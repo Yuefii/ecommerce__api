@@ -3,14 +3,15 @@ import { updateUserService } from '../services/updateUserService'
 import { UserDTO } from '../../../dto/UserDto'
 
 export const updateUserController = async (req: Request, res: Response) => {
+  const { userId } = req.params
+  const userData = req.body
   try {
-    const userId = req.params.userId
-    const userData = req.body
-    const user = await updateUserService(userId, userData)
-    const response = UserDTO(user)
-    res.json({
+    const result = await updateUserService(userId, userData)
+    const DTO = new UserDTO()
+    const response = DTO.fromCreate(result)
+    res.status(201).json({
       message: 'successfully',
-      statusCode: 200,
+      statusCode: 201,
       updated: response
     })
   } catch (error) {

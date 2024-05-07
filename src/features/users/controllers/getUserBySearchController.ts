@@ -1,6 +1,6 @@
+import { UserDTO } from '../../../dto/UserDto'
 import { Request, Response } from 'express'
 import { getUserBySearchService } from '../services/getUserBySearchService'
-import { UserInfoDTO } from '../../../dto/UserDto'
 
 export const getUserBySearchController = async (
   req: Request,
@@ -13,7 +13,8 @@ export const getUserBySearchController = async (
       : 10
     if (typeof keyword === 'string') {
       const result = await getUserBySearchService(keyword, limit)
-      const response = result.map(UserInfoDTO)
+      const DTO = new UserDTO()
+      const response = result.map((item) => DTO.fromSearch(item))
       res.status(200).json({ data: response })
     } else {
       throw new Error('Invalid keyword provided')

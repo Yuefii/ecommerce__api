@@ -1,13 +1,14 @@
-import { Request, Response } from 'express'
-import { createUserService } from '../services/createUserService'
 import { UserDTO } from '../../../dto/UserDto'
 import { ResponseError } from '../../../error/responseError'
+import { Request, Response } from 'express'
+import { createUserService } from '../services/createUserService'
 
 export const createUserController = async (req: Request, res: Response) => {
   try {
     const userData = req.body
-    const user = await createUserService(userData)
-    const response = UserDTO(user)
+    const result = await createUserService(userData)
+    const DTO = new UserDTO()
+    const response = DTO.fromCreate(result)
     res.status(201).json({
       message: 'successfully',
       statusCode: 201,
