@@ -2,6 +2,7 @@ import prisma from '../../../libs/prisma'
 
 export const updateProductService = async (
   productId: string,
+  userId: string,
   productData: {
     nama: string
     description: string
@@ -24,6 +25,7 @@ export const updateProductService = async (
       price,
       brand,
       category,
+      ownerId: userId,
       quantity,
       images: {
         deleteMany: {},
@@ -33,7 +35,8 @@ export const updateProductService = async (
       }
     },
     include: {
-      images: true
+      images: true,
+      owner: true
     }
   })
   return result

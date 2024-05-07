@@ -6,10 +6,11 @@ export const getProductByProductIdController = async (
   req: Request,
   res: Response
 ) => {
+  const { productId } = req.params
   try {
-    const productId = req.params.productId
-    const product = await getProductByIdService(productId)
-    const response = ProductDTO(product)
+    const result = await getProductByIdService(productId)
+    const DTO = new ProductDTO()
+    const response = DTO.fromGet(result)
     res.status(200).json({ data: response })
   } catch (error) {
     console.error(error)

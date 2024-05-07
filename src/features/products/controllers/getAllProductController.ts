@@ -1,7 +1,7 @@
+import { ProductDTO } from '../../../dto/ProductDto'
+import { getTotalProducts } from '../../../utils/totalProducts'
 import { Request, Response } from 'express'
 import { getAllProductService } from '../services/getAllProductService'
-import { getTotalProducts } from '../../../utils/totalProducts'
-import { ProductDTO } from '../../../dto/ProductDto'
 
 export const getAllProductController = async (req: Request, res: Response) => {
   let { page = 1, limit = 10 } = req.query
@@ -11,8 +11,9 @@ export const getAllProductController = async (req: Request, res: Response) => {
 
     const totalProducts = await getTotalProducts()
     const offset = (parseInt(page) - 1) * parseInt(limit)
-    const product = await getAllProductService(offset, parseInt(limit))
-    const response = product.map(ProductDTO)
+    const result = await getAllProductService(offset, parseInt(limit))
+    const DTO = new ProductDTO()
+    const response = result.map((item) => DTO.fromGet(item))
     res.status(200).json({
       pagination: {
         total_products: totalProducts,

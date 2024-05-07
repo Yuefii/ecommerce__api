@@ -53,7 +53,10 @@ productsRouter.post('', products.createProductController)
 productsRouter.get('', products.getAllProductController)
 productsRouter.get('/search', products.getProductBySearchController)
 productsRouter.get('/:productId', products.getProductByProductIdController)
-productsRouter.patch('/:productId/update', products.updateProductController)
+productsRouter.patch(
+  '/:productId/owner/:userId/update',
+  products.updateProductController
+)
 productsRouter.delete('/:productId/delete', products.deleteProductController)
 // reviews router
 productsRouter.get('/:productId/review', reviews.getReviewByIdController)

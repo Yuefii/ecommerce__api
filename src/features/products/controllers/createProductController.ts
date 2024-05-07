@@ -1,13 +1,14 @@
+import { ProductDTO } from '../../../dto/ProductDto'
 import { Request, Response } from 'express'
 import { createProductService } from '../services/createProductService'
-import { ProductDTO } from '../../../dto/ProductDto'
 
 export const createProductController = async (req: Request, res: Response) => {
   try {
     const productData = req.body
-    const product = await createProductService(productData)
-    const response = ProductDTO(product)
-    res.status(200).json({
+    const result = await createProductService(productData)
+    const DTO = new ProductDTO()
+    const response = DTO.fromCreate(result)
+    res.status(201).json({
       message: 'successfully',
       data: response
     })

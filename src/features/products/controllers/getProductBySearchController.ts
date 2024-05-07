@@ -1,6 +1,6 @@
+import { ProductDTO } from '../../../dto/ProductDto'
 import { Request, Response } from 'express'
 import { getProductBySearchService } from '../services/getProductBySearchService'
-import { ProductDTO } from '../../../dto/ProductDto'
 
 export const getProductBySearchController = async (
   req: Request,
@@ -12,8 +12,9 @@ export const getProductBySearchController = async (
       ? parseInt(req.query.limit.toString())
       : 10
     if (typeof keyword === 'string') {
-      const searchData = await getProductBySearchService(keyword, limit)
-      const response = searchData.map(ProductDTO)
+      const result = await getProductBySearchService(keyword, limit)
+      const DTO = new ProductDTO()
+      const response = result.map((item) => DTO.fromGet(item))
       res.status(200).json({ data: response })
     } else {
       throw new Error('Invalid keyword provided')
