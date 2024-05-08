@@ -15,6 +15,7 @@ datasource db {
 
 model Users {
   userId    String     @id @default(auto()) @map("_id") @db.ObjectId
+  ChatId    String?    @db.ObjectId
   nama      String?
   email     String     @unique
   password  String
@@ -28,8 +29,31 @@ model Users {
   order     Orders[]
   products  Products[]
   history   History[]
+  messages  Messages[]
   createdAt DateTime   @default(now())
   updateAt  DateTime   @updatedAt
+
+  // Relational
+  chat      Chat?      @relation(fields: [ChatId], references: [chatId])
+}
+
+model Chat {
+  chatId       String     @id @default(auto()) @map("_id") @db.ObjectId
+  participants Users[]
+  messages     Messages[]
+  createdAt    DateTime   @default(now())
+}
+
+model Messages {
+  messageId String   @id @default(auto()) @map("_id") @db.ObjectId
+  senderId  String?  @db.ObjectId
+  chatId    String?  @db.ObjectId
+  text      String
+  createdAt DateTime @default(now())
+
+  // Relational
+  sender Users? @relation(fields: [senderId], references: [userId])
+  chat   Chat?  @relation(fields: [chatId], references: [chatId])
 }
 
 model History {

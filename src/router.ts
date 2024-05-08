@@ -12,6 +12,7 @@ import {
 } from './validation/userValidation'
 import { history } from './features/history'
 import { discus } from './features/discus'
+import { chat } from './features/chats'
 
 export const router = express.Router()
 
@@ -44,6 +45,18 @@ usersRouter.delete(
   '/:historyId/history/delete',
   history.deleteHistoryController
 )
+
+// grouping /v1/chats
+const chatRouter = express.Router()
+router.use('/v1/chats', chatRouter)
+// chat router
+chatRouter.post('', chat.createRoomChatController)
+chatRouter.post(
+  '/room/:chatId/sender/:senderId/message',
+  chat.createMessageController
+)
+chatRouter.get('/room/:chatId/message', chat.getMessageByChatIdController)
+chatRouter.get('/room', chat.getAllRoomChatController)
 
 // grouping /v1/products
 const productsRouter = express.Router()
