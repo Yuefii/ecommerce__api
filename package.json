@@ -5,8 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon",
-    "start": "node build/src/app.js",
+    "start": "node dist/src/index.js",
     "build": "tsc",
+    "postinstall": "prisma generate",
     "lint": "pnpx eslint .",
     "lint:fix": "pnpx eslint . --fix",
     "format": "pnpx prettier . --write",

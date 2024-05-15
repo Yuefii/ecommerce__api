@@ -7,7 +7,7 @@ export default [
     languageOptions: { globals: globals.node }
   },
   {
-    ignores: ['build/*', 'node_modules/*', 'docs/*'],
+    ignores: ['dist/*', 'node_modules/*', 'docs/*'],
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
