@@ -1,7 +1,7 @@
 import { logger } from '../../../utils/winston'
 import { Request, Response } from 'express'
 import { getHistoryByUserIdService } from '../services/getHistoryByUserIdService'
-import { HistoryDTO } from '../../../dto/HistoryDto'
+import { HistoryDTO } from '../../../dto/history-dto'
 
 export const getHistoryByHistoryIdController = async (
   req: Request,

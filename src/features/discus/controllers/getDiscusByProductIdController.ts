@@ -1,5 +1,5 @@
 import { logger } from '../../../utils/winston'
-import { DiscusDTO } from '../../../dto/DiscusDto'
+import { DiscusDTO } from '../../../dto/discus-dto'
 import { Request, Response } from 'express'
 import { getDiscusByProductIdService } from '../services/getDiscusByProductIdService'
 

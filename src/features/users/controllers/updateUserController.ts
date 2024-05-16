@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { updateUserService } from '../services/updateUserService'
-import { UserDTO } from '../../../dto/UserDto'
+import { UserDTO } from '../../../dto/user-dto'
 
 export const updateUserController = async (req: Request, res: Response) => {
   const { userId } = req.params

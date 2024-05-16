@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { getProductByIdService } from '../services/getProductByProductIdService'
-import { ProductDTO } from '../../../dto/ProductDto'
+import { ProductDTO } from '../../../dto/product-dto'
 
 export const getProductByProductIdController = async (
   req: Request,

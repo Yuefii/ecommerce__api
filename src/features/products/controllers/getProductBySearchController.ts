@@ -1,4 +1,4 @@
-import { ProductDTO } from '../../../dto/ProductDto'
+import { ProductDTO } from '../../../dto/product-dto'
 import { Request, Response } from 'express'
 import { getProductBySearchService } from '../services/getProductBySearchService'
 

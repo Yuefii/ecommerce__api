@@ -1,5 +1,5 @@
 import { logger } from '../../../utils/winston'
-import { HistoryDTO } from '../../../dto/HistoryDto'
+import { HistoryDTO } from '../../../dto/history-dto'
 import { Request, Response } from 'express'
 import { createHistoryService } from '../services/createHistoryService'
 

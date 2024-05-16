@@ -1,4 +1,4 @@
-import { UserDTO } from '../../../dto/UserDto'
+import { UserDTO } from '../../../dto/user-dto'
 import { Request, Response } from 'express'
 import { getUserByUserIdService } from '../services/getUserByUserIdService'
 
