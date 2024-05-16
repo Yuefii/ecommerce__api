@@ -4,7 +4,7 @@ export class ProductDTO {
   public fromGet(result: any) {
     return {
       product_id: result.productId,
-      name: result.name,
+      name: result.nama,
       description: result.description,
       price: result.price,
       brand: result.brand,
@@ -28,7 +28,7 @@ export class ProductDTO {
             discus_id: discusItem.discusId,
             user_id: discusItem.userId,
             discus_message: discusItem.message,
-            name: discusItem.Users.nama,
+            name: discusItem.Users?.name,
             discus_type: Array.isArray(discusItem.discusType)
               ? discusItem.discusType.map((dicusTypeItem: any) => ({
                   name: dicusTypeItem.name
@@ -60,7 +60,7 @@ export class ProductDTO {
           }))
         : [],
       created_at: result.createdAt,
-      updated_at: result.updatedAt
+      updated_at: result.updateAt
     }
   }
 
