@@ -43,14 +43,12 @@ interface FromReplyType {
 }
 
 export class DiscusDTO {
-  constructor() {}
-
   public fromGet(result: FromGetType) {
     return {
       discus_id: result.discusId,
       user_id: result.userId,
       discus_message: result.message,
-      name: result.Users.nama,
+      name: result.Users.name,
       discus_type: Array.isArray(result.discusType)
         ? result.discusType.map((item) => ({
             name: item.name
@@ -61,7 +59,7 @@ export class DiscusDTO {
             discus_id: item.discusId,
             reply_id: item.replyId,
             user_id: item.userId,
-            name: item.Users.nama,
+            name: item.Users.name,
             reply_message: item.message,
             created_at: item.createdAt
           }))
@@ -74,7 +72,7 @@ export class DiscusDTO {
     return {
       discus_id: result.discusId,
       user_id: result.userId,
-      name: result.Users.nama,
+      name: result.Users.name,
       discus_message: result.message,
       discus_type: Array.isArray(result.discusType)
         ? result.discusType.map((item) => ({
@@ -90,7 +88,7 @@ export class DiscusDTO {
       reply_id: result.replyId,
       discus_id: result.discusId,
       user_id: result.userId,
-      name: result.Users.nama,
+      name: result.Users.name,
       reply_message: result.message,
       created_at: result.createdAt
     }

@@ -8,7 +8,7 @@ export const getAllRoomChatController = async (req: Request, res: Response) => {
       chat_id: item.chatId,
       participants: item.participants.map((item) => ({
         user_id: item.userId,
-        name: item.nama,
+        name: item.name,
         email: item.email
       }))
     }))

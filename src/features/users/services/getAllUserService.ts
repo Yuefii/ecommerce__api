@@ -15,7 +15,8 @@ export const getAllUsersService = async () => {
         }
       },
       history: true,
-      order: true
+      order: true,
+      dateOfBirth: true
     }
   })
   return result

@@ -15,7 +15,7 @@ export const getAllOrderController = async (req: Request, res: Response) => {
         total_price: totalPrice,
         user: {
           user_id: item.user.userId,
-          name: item.user.nama,
+          name: item.user.name,
           email: item.user.email
         },
         items: item.items.map((item) => ({

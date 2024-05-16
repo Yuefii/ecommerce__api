@@ -8,7 +8,7 @@ export const getUserBySearchService = async (
     where: {
       OR: [
         {
-          nama: { contains: keyword }
+          name: { contains: keyword }
         }
       ]
     },

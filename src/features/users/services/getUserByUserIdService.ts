@@ -18,7 +18,8 @@ export const getUserByUserIdService = async (userId: string) => {
         }
       },
       history: true,
-      order: true
+      order: true,
+      dateOfBirth: true
     }
   })
   return result

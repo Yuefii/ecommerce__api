@@ -13,7 +13,7 @@ export const getReviewByIdController = async (req: Request, res: Response) => {
       created_at: item.createdAt,
       user: {
         user_id: item.users.userId,
-        name: item.users.nama,
+        name: item.users.name,
         email: item.users.email
       }
     }))

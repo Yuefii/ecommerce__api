@@ -17,7 +17,7 @@ export const updateCartController = async (req: Request, res: Response) => {
       },
       user: {
         user_id: result.user.userId,
-        name: result.user.nama,
+        name: result.user.name,
         email: result.user.email
       },
       created_at: result.createdAt,

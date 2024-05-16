@@ -7,8 +7,7 @@ import { orders } from './features/orders'
 import { UserImageUrl } from './utils/imageUrl'
 import {
   validateUserLogin,
-  validateUserRegister,
-  validateUserUpdate
+  validateUserRegister
 } from './validation/userValidation'
 import { history } from './features/history'
 import { discus } from './features/discus'
@@ -19,7 +18,7 @@ export const router = express.Router()
 // grouping img url /public/
 const publicRouter = express.Router()
 router.use('/public', publicRouter)
-publicRouter.get('/public/user/:imageName', UserImageUrl)
+publicRouter.get('/user/:imageName', UserImageUrl)
 
 // grouping /v1/users
 const usersRouter = express.Router()
@@ -30,11 +29,7 @@ usersRouter.post('/login', validateUserLogin, users.loginUserController)
 usersRouter.get('', users.getAllUsersController)
 usersRouter.get('/search', users.getUserBySearchController)
 usersRouter.get('/:userId', users.getUserByUserIdController)
-usersRouter.patch(
-  '/:userId/update',
-  validateUserUpdate,
-  users.updateUserController
-)
+usersRouter.patch('/:userId/update', users.updateUserController)
 usersRouter.put('/:userId/change-password', users.changePasswordController)
 usersRouter.put('/:userId/upload-image', users.uploadImageUserController)
 usersRouter.delete('/:userId/delete', users.deleteUserController)

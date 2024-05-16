@@ -3,13 +3,11 @@ import prisma from '../../../libs/prisma'
 import { ResponseError } from '../../../error/responseError'
 
 export const createUserService = async (userData: {
-  nama: string
+  name: string
   email: string
   password: string
-  alamat: string
-  no_telp: string
 }) => {
-  const { nama, email, password, alamat, no_telp } = userData
+  const { name, email, password } = userData
   const existingUser = await prisma.users.findUnique({
     where: {
       email: email
@@ -22,10 +20,8 @@ export const createUserService = async (userData: {
   const result = await prisma.users.create({
     data: {
       email,
-      nama,
-      password: hashPassword,
-      alamat,
-      no_telp
+      name,
+      password: hashPassword
     }
   })
   return result

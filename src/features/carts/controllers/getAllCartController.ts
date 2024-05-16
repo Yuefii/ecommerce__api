@@ -15,7 +15,7 @@ export const getAllCartController = async (req: Request, res: Response) => {
       },
       user: {
         user_id: item.user.userId,
-        name: item.user.nama,
+        name: item.user.name,
         email: item.user.email
       },
       created_at: item.createdAt,

@@ -12,7 +12,7 @@ export const getMessageByChatIdController = async (
       chat_id: item.chatId,
       message_id: item.messageId,
       user: {
-        name: item.sender?.nama,
+        name: item.sender?.name,
         email: item.sender?.email
       },
       message: item.text,

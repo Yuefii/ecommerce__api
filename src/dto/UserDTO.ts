@@ -1,15 +1,25 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-export class UserDTO {
-  constructor() {}
+import { baseUrl } from '../utils/env'
 
+export class UserDTO {
   public fromGet(result: any) {
     return {
       user_id: result.userId,
-      name: result.nama,
+      name: result.name,
+      username: result.username,
+      avatar: baseUrl + 'public/user/' + result.imageUrl,
+      bio: result.bio,
+      date_of_birth: Array.isArray(result.dateOfBirth)
+        ? result.dateOfBirth.map((item: any) => ({
+            date: item.date,
+            moon: item.moon,
+            year: item.year
+          }))
+        : [],
       email: result.email,
-      address: result.alamat,
-      phone_number: result.no_telp,
+      address: result.address,
+      phone_number: result.phoneNumber,
       history_search: Array.isArray(result.history)
         ? result.history.map((userHistory: any) => ({
             history_id: userHistory.historyId,
@@ -33,14 +43,6 @@ export class UserDTO {
             comment: userReview.comment
           }))
         : [],
-      carts: Array.isArray(result.cart)
-        ? result.cart.map((userCart: any) => ({
-            cart_id: userCart.cartId,
-            name: userCart.product.nama,
-            quantity: userCart.quantity,
-            created_at: userCart.createdAt
-          }))
-        : [],
       created_at: result.createdAt,
       updated_at: result.updatedAt
     }
@@ -49,10 +51,20 @@ export class UserDTO {
   public fromCreate(result: any) {
     return {
       user_id: result.userId,
-      name: result.nama,
+      name: result.name,
+      username: result.username,
+      avatar: baseUrl + 'public/user/' + result.imageUrl,
+      bio: result.bio,
+      date_of_birth: Array.isArray(result.dateOfBirth)
+        ? result.dateOfBirth.map((item: any) => ({
+            date: item.date,
+            moon: item.moon,
+            year: item.year
+          }))
+        : [],
       email: result.email,
-      address: result.alamat,
-      phone_number: result.no_telp,
+      address: result.address,
+      phone_number: result.phoneNumber,
       updated_at: result.updatedAt
     }
   }
@@ -60,9 +72,11 @@ export class UserDTO {
   public fromSearch(result: any) {
     return {
       user_id: result.userId,
-      name: result.nama,
+      name: result.name,
+      username: result.username,
+      avatar: baseUrl + 'public/user/' + result.imageUrl,
       email: result.email,
-      phone_number: result.no_telp,
+      phone_number: result.phoneNumber,
       created_at: result.createdAt,
       updated_at: result.updatedAt
     }

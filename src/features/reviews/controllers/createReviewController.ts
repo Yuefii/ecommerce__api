@@ -15,7 +15,7 @@ export const createReviewController = async (req: Request, res: Response) => {
       created_at: result.createdAt,
       user: {
         user_id: result.users.userId,
-        name: result.users.nama,
+        name: result.users.name,
         email: result.users.email
       }
     }

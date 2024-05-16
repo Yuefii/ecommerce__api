@@ -14,27 +14,41 @@ datasource db {
 }
 
 model Users {
-  userId    String     @id @default(auto()) @map("_id") @db.ObjectId
-  ChatId    String?    @db.ObjectId
-  nama      String?
-  email     String     @unique
-  password  String
-  imageUrl  String?
-  alamat    String?
-  no_telp   String?
-  review    Reviews[]
-  reply     Reply[]
-  discus    Discus[]
-  cart      Carts[]
-  order     Orders[]
-  products  Products[]
-  history   History[]
-  messages  Messages[]
-  createdAt DateTime   @default(now())
-  updateAt  DateTime   @updatedAt
+  userId      String        @id @default(auto()) @map("_id") @db.ObjectId
+  ChatId      String?       @db.ObjectId
+  name        String?
+  username    String?
+  bio         String?
+  email       String        @unique
+  password    String
+  imageUrl    String?       @default("default_avatar.png")
+  address     String?
+  phoneNumber String?
+  dateOfBirth DateOfBirth[]
+  review      Reviews[]
+  reply       Reply[]
+  discus      Discus[]
+  cart        Carts[]
+  order       Orders[]
+  products    Products[]
+  history     History[]
+  messages    Messages[]
+  createdAt   DateTime      @default(now())
+  updateAt    DateTime      @updatedAt
 
   // Relational
-  chat      Chat?      @relation(fields: [ChatId], references: [chatId])
+  chat Chat? @relation(fields: [ChatId], references: [chatId])
+}
+
+model DateOfBirth {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId String? @db.ObjectId
+  date   String?
+  moon   String?
+  year   String?
+
+  // Relational
+  Users Users? @relation(fields: [userId], references: [userId])
 }
 
 model Chat {

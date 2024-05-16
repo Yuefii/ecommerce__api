@@ -1,12 +1,10 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 export class ProductDTO {
-  constructor() {}
-
   public fromGet(result: any) {
     return {
       product_id: result.productId,
-      name: result.nama,
+      name: result.name,
       description: result.description,
       price: result.price,
       brand: result.brand,
@@ -22,7 +20,7 @@ export class ProductDTO {
         : [],
       owner: {
         owner_id: result.owner.userId,
-        name: result.owner.nama,
+        name: result.owner.name,
         email: result.owner.email
       },
       discus: Array.isArray(result.discus)
@@ -41,7 +39,7 @@ export class ProductDTO {
                   discus_id: discusReplyItem.discusId,
                   reply_id: discusReplyItem.replyId,
                   user_id: discusReplyItem.userId,
-                  name: discusReplyItem.Users?.nama,
+                  name: discusReplyItem.Users?.name,
                   reply_message: discusReplyItem.message,
                   created_at: discusReplyItem.createdAt
                 }))
@@ -56,7 +54,7 @@ export class ProductDTO {
             rating: reviewItem.rating,
             user: {
               user_id: reviewItem.users.userId,
-              name: reviewItem.users.nama,
+              name: reviewItem.users.name,
               email: reviewItem.users.email
             }
           }))
@@ -69,7 +67,7 @@ export class ProductDTO {
   public fromCreate(result: any) {
     return {
       product_id: result.productId,
-      name: result.nama,
+      name: result.name,
       description: result.description,
       price: result.price,
       brand: result.brand,
@@ -85,7 +83,7 @@ export class ProductDTO {
         : [],
       owner: {
         owner_id: result.owner.userId,
-        name: result.owner.nama,
+        name: result.owner.name,
         email: result.owner.email
       },
       created_at: result.createdAt,
