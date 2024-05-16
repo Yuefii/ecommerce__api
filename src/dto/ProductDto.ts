@@ -1,5 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
+import { baseUrl } from '../utils/env'
+
 export class ProductDTO {
   public fromGet(result: any) {
     return {
@@ -21,6 +23,7 @@ export class ProductDTO {
       owner: {
         owner_id: result.owner.userId,
         name: result.owner.name,
+        avatar: baseUrl + 'public/user/' + result.owner.imageUrl,
         email: result.owner.email
       },
       discus: Array.isArray(result.discus)
@@ -29,6 +32,7 @@ export class ProductDTO {
             user_id: discusItem.userId,
             discus_message: discusItem.message,
             name: discusItem.Users?.name,
+            avatar: baseUrl + 'public/user/' + discusItem.Users?.imageUrl,
             discus_type: Array.isArray(discusItem.discusType)
               ? discusItem.discusType.map((dicusTypeItem: any) => ({
                   name: dicusTypeItem.name
@@ -40,6 +44,8 @@ export class ProductDTO {
                   reply_id: discusReplyItem.replyId,
                   user_id: discusReplyItem.userId,
                   name: discusReplyItem.Users?.name,
+                  avatar:
+                    baseUrl + 'public/user/' + discusReplyItem.Users?.imageUrl,
                   reply_message: discusReplyItem.message,
                   created_at: discusReplyItem.createdAt
                 }))
@@ -84,6 +90,7 @@ export class ProductDTO {
       owner: {
         owner_id: result.owner.userId,
         name: result.owner.name,
+        avatar: baseUrl + 'public/user/' + result.owner.imageUrl,
         email: result.owner.email
       },
       created_at: result.createdAt,

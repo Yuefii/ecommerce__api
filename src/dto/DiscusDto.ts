@@ -1,5 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
+import { baseUrl } from '../utils/env'
+
 interface discusTypeInterface {
   name: string
 }
@@ -49,6 +51,7 @@ export class DiscusDTO {
       user_id: result.userId,
       discus_message: result.message,
       name: result.Users.name,
+      avatar: baseUrl + 'public/user/' + result.Users.imageUrl,
       discus_type: Array.isArray(result.discusType)
         ? result.discusType.map((item) => ({
             name: item.name
@@ -60,6 +63,7 @@ export class DiscusDTO {
             reply_id: item.replyId,
             user_id: item.userId,
             name: item.Users.name,
+            avatar: baseUrl + 'public/user/' + result.Users.imageUrl,
             reply_message: item.message,
             created_at: item.createdAt
           }))
@@ -89,6 +93,7 @@ export class DiscusDTO {
       discus_id: result.discusId,
       user_id: result.userId,
       name: result.Users.name,
+      avatar: baseUrl + 'public/user/' + result.Users.imageUrl,
       reply_message: result.message,
       created_at: result.createdAt
     }
