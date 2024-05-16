@@ -25,6 +25,7 @@ model Users {
   address     String?
   phoneNumber String?
   dateOfBirth DateOfBirth[]
+  gender      String?
   review      Reviews[]
   reply       Reply[]
   discus      Discus[]

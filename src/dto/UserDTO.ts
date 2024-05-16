@@ -10,6 +10,7 @@ export class UserDTO {
       username: result.username,
       avatar: baseUrl + 'public/user/' + result.imageUrl,
       bio: result.bio,
+      gender: result.gender,
       date_of_birth: Array.isArray(result.dateOfBirth)
         ? result.dateOfBirth.map((item: any) => ({
             date: item.date,
@@ -55,6 +56,7 @@ export class UserDTO {
       username: result.username,
       avatar: baseUrl + 'public/user/' + result.imageUrl,
       bio: result.bio,
+      gender: result.gender,
       date_of_birth: Array.isArray(result.dateOfBirth)
         ? result.dateOfBirth.map((item: any) => ({
             date: item.date,

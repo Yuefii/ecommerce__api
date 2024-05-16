@@ -2,7 +2,6 @@ import path from 'path'
 import dotenv from 'dotenv'
 
 import { Request, Response } from 'express'
-import { v4 as uuidv4 } from 'uuid'
 import { UploadedFile } from 'express-fileupload'
 import { uploadImageUserService } from '../services/uploadImageUserService'
 
@@ -24,7 +23,8 @@ export const uploadImageUserController = async (
 
     const { userId } = req.params
     const imageUrl = req.files.imageUrl as UploadedFile
-    const fileName = uuidv4() + path.extname(imageUrl.name)
+    const fileExtension = path.extname(imageUrl.name)
+    const fileName = userId + fileExtension
 
     imageUrl.mv(
       path.join(__dirname, '../../../../', 'public/user', fileName),

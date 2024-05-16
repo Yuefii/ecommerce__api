@@ -9,6 +9,7 @@ interface UserUpdateData {
   dateOfBirth?: {
     createMany: { data: [] }
   }
+  gender: string
 }
 
 export const updateUserService = async (
@@ -20,15 +21,25 @@ export const updateUserService = async (
     phoneNumber: string
     bio: string
     dateOfBirth?: []
+    gender?: 'pria' | 'wanita'
   }
 ) => {
-  const { name, username, address, phoneNumber, bio, dateOfBirth } = userData
+  const { name, username, address, phoneNumber, bio, dateOfBirth, gender } =
+    userData
   const dataToUpdate: UserUpdateData = {
     name,
     username,
     address,
     phoneNumber,
-    bio
+    bio,
+    gender: ''
+  }
+
+  if (gender) {
+    if (gender !== 'pria' && gender !== 'wanita') {
+      throw new Error("Gender must be either 'pria' or 'wanita'")
+    }
+    dataToUpdate.gender = gender
   }
 
   if (dateOfBirth) {
