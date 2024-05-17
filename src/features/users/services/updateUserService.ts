@@ -3,6 +3,7 @@ import prisma from '../../../libs/prisma'
 interface UserUpdateData {
   name: string
   username: string
+  email: string
   address: string
   phoneNumber: string
   bio: string
@@ -17,6 +18,7 @@ export const updateUserService = async (
   userData: {
     name: string
     username: string
+    email: string
     address: string
     phoneNumber: string
     bio: string
@@ -24,11 +26,20 @@ export const updateUserService = async (
     gender?: 'pria' | 'wanita'
   }
 ) => {
-  const { name, username, address, phoneNumber, bio, dateOfBirth, gender } =
-    userData
+  const {
+    name,
+    username,
+    email,
+    address,
+    phoneNumber,
+    bio,
+    dateOfBirth,
+    gender
+  } = userData
   const dataToUpdate: UserUpdateData = {
     name,
     username,
+    email,
     address,
     phoneNumber,
     bio,
