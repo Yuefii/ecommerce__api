@@ -1,11 +1,17 @@
 FROM node:22-alpine3.18
 
 WORKDIR /app
-COPY package.json pnpm-lock.yaml .env ./
+COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm
 COPY . .
 RUN pnpm install
-RUN pnpx prisma generate
-RUN pnpm build
+
+# for production
+# RUN pnpm prisma generate
+# RUN pnpm build
+
 EXPOSE 8080
-CMD ["pnpm", "start"]
+CMD ["pnpm", "dev"]
+
+# CMD ["pnpm", "start"]
+
