@@ -19,7 +19,15 @@ export class UserDTO {
           }))
         : [],
       email: result.email,
-      address: result.address,
+      address: Array.isArray(result.address)
+        ? result.address.map((item: any) => ({
+            address_label: item.addressLabel,
+            address_complete: item.addressComplete,
+            note_to_courier: item.noteToCourier,
+            receiper_name: item.receiperName,
+            phone_number: item.phoneNumber
+          }))
+        : [],
       phone_number: result.phoneNumber,
       history_search: Array.isArray(result.history)
         ? result.history.map((userHistory: any) => ({
@@ -65,7 +73,15 @@ export class UserDTO {
           }))
         : [],
       email: result.email,
-      address: result.address,
+      address: Array.isArray(result.address)
+        ? result.address.map((item: any) => ({
+            address_label: item.addressLabel,
+            address_complete: item.addressComplete,
+            note_to_courier: item.noteToCourier,
+            receiper_name: item.receiperName,
+            phone_number: item.phoneNumber
+          }))
+        : [],
       phone_number: result.phoneNumber,
       updated_at: result.updatedAt
     }

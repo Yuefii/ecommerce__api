@@ -1,14 +1,27 @@
 import prisma from '../../../libs/prisma'
+import { ResponseError } from '../../../error/responseError'
 
 interface UserUpdateData {
   name: string
   username: string
   email: string
-  address: string
+  address?: {
+    create: Array<{
+      address_label: string
+      address_complete: string
+      note_to_courier: string
+      receiper_name: string
+      phone_number: string
+    }>
+  }
   phoneNumber: string
   bio: string
   dateOfBirth?: {
-    createMany: { data: [] }
+    create: Array<{
+      date: string
+      moon: string
+      year: string
+    }>
   }
   gender: string
 }
@@ -19,10 +32,20 @@ export const updateUserService = async (
     name: string
     username: string
     email: string
-    address: string
+    address?: Array<{
+      address_label: string
+      address_complete: string
+      note_to_courier: string
+      receiper_name: string
+      phone_number: string
+    }>
     phoneNumber: string
     bio: string
-    dateOfBirth?: []
+    dateOfBirth?: Array<{
+      date: string
+      moon: string
+      year: string
+    }>
     gender?: 'pria' | 'wanita'
   }
 ) => {
@@ -40,7 +63,6 @@ export const updateUserService = async (
     name,
     username,
     email,
-    address,
     phoneNumber,
     bio,
     gender: ''
@@ -53,19 +75,43 @@ export const updateUserService = async (
     dataToUpdate.gender = gender
   }
 
-  if (dateOfBirth) {
-    dataToUpdate.dateOfBirth = {
-      createMany: { data: dateOfBirth }
+  return await prisma.$transaction(async (prisma) => {
+    if (address) {
+      const existingAddressesCount = await prisma.address.count({
+        where: { userId }
+      })
+
+      const newAddressesCount = address.length
+      if (existingAddressesCount + newAddressesCount > 3) {
+        throw new ResponseError('User cannot have more than 3 addresses', 400)
+      }
+
+      dataToUpdate.address = {
+        create: address
+      }
     }
-  }
-  const result = await prisma.users.update({
-    where: {
-      userId: userId
-    },
-    data: dataToUpdate,
-    include: {
-      dateOfBirth: true
+
+    if (dateOfBirth) {
+      await prisma.dateOfBirth.deleteMany({
+        where: { userId }
+      })
+
+      dataToUpdate.dateOfBirth = {
+        create: dateOfBirth
+      }
     }
+
+    const result = await prisma.users.update({
+      where: {
+        userId
+      },
+      data: dataToUpdate,
+      include: {
+        dateOfBirth: true,
+        address: true
+      }
+    })
+
+    return result
   })
-  return result
 }
