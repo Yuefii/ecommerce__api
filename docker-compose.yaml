@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  mongodb:
+    image: prismagraphql/mongo-single-replica:4.4.3-bionic
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      INIT_WAIT_SEC: 3
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app
+      # turn off this during production
+      - node_modules:/app/node_modules
+    stdin_open: true
+volumes:
+  mongodb: {}
+  # turn off this during production
+  node_modules:

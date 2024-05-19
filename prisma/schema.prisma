@@ -14,10 +14,203 @@ datasource db {
 }
 
 model Users {
-  userId   String  @id @default(auto()) @map("_id") @db.ObjectId
-  nama     String?
-  email    String  @unique
-  password String
-  alamat   String?
-  no_telp  String?
+  userId      String        @id @default(auto()) @map("_id") @db.ObjectId
+  ChatId      String?       @db.ObjectId
+  name        String?
+  username    String?
+  bio         String?
+  email       String        @unique
+  password    String
+  imageUrl    String?       @default("default_avatar.png")
+  address     Address[]
+  phoneNumber String?
+  dateOfBirth DateOfBirth[]
+  gender      String?
+  review      Reviews[]
+  reply       Reply[]
+  discus      Discus[]
+  cart        Carts[]
+  order       Orders[]
+  products    Products[]
+  history     History[]
+  messages    Messages[]
+  createdAt   DateTime      @default(now())
+  updateAt    DateTime      @updatedAt
+
+  // Relational
+  chat Chat? @relation(fields: [ChatId], references: [chatId])
+}
+
+model Address {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String? @db.ObjectId
+  addressLabel    String?
+  addressComplete String?
+  noteToCourier   String?
+  receiperName    String?
+  phoneNumber     String?
+
+  // Relational
+  Users Users? @relation(fields: [userId], references: [userId])
+}
+
+model DateOfBirth {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId String? @db.ObjectId
+  date   String?
+  month  String?
+  year   String?
+
+  // Relational
+  Users Users? @relation(fields: [userId], references: [userId])
+}
+
+model Chat {
+  chatId       String     @id @default(auto()) @map("_id") @db.ObjectId
+  participants Users[]
+  messages     Messages[]
+  createdAt    DateTime   @default(now())
+}
+
+model Messages {
+  messageId String   @id @default(auto()) @map("_id") @db.ObjectId
+  senderId  String?  @db.ObjectId
+  chatId    String?  @db.ObjectId
+  text      String
+  createdAt DateTime @default(now())
+
+  // Relational
+  sender Users? @relation(fields: [senderId], references: [userId])
+  chat   Chat?  @relation(fields: [chatId], references: [chatId])
+}
+
+model History {
+  historyId String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String? @db.ObjectId
+  title     String?
+  category  String?
+
+  // Relational
+  users Users? @relation(fields: [userId], references: [userId], onDelete: Cascade)
+}
+
+model Discus {
+  discusId   String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String?      @db.ObjectId
+  productId  String?      @db.ObjectId
+  message    String
+  discusType DiscusType[]
+  reply      Reply[]
+  createdAt  DateTime     @default(now())
+
+  // Relational
+  Users    Users?    @relation(fields: [userId], references: [userId])
+  Products Products? @relation(fields: [productId], references: [productId])
+}
+
+model Reply {
+  replyId   String   @id @default(auto()) @map("_id") @db.ObjectId
+  discusId  String?  @db.ObjectId
+  userId    String?  @db.ObjectId
+  message   String
+  createdAt DateTime @default(now())
+
+  // Relational
+  Discus Discus? @relation(fields: [discusId], references: [discusId])
+  Users  Users?  @relation(fields: [userId], references: [userId])
+}
+
+model DiscusType {
+  discusTypeId String  @id @default(auto()) @map("_id") @db.ObjectId
+  discusId     String? @db.ObjectId
+  name         String
+
+  // Relational
+  Discus Discus? @relation(fields: [discusId], references: [discusId])
+}
+
+model Products {
+  productId   String      @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId     String      @db.ObjectId
+  nama        String
+  description String
+  price       Int
+  brand       String
+  category    String
+  quantity    Int
+  images      Images[]
+  discus      Discus[]
+  review      Reviews[]
+  Cart        Carts[]
+  OrderItem   OrderItem[]
+  createdAt   DateTime    @default(now())
+  updateAt    DateTime    @updatedAt
+
+  // Relational
+  owner Users @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
+}
+
+model Images {
+  imgId     String @id @default(auto()) @map("_id") @db.ObjectId
+  productId String @db.ObjectId
+  color     String
+  colorCode String
+  url       String
+
+  // Relational
+  product Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
+}
+
+model Reviews {
+  reviewId  String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  productId String   @db.ObjectId
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  // Relational
+  users   Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  product Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
+}
+
+model Carts {
+  cartId    String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String    @db.ObjectId
+  productId String    @db.ObjectId
+  quantity  Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  // Relational
+  user    Users    @relation(fields: [userId], references: [userId])
+  product Products @relation(fields: [productId], references: [productId])
+}
+
+model Orders {
+  orderId   String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String      @db.ObjectId
+  status    String
+  items     OrderItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?   @updatedAt
+
+  // Relational
+  user Users @relation(fields: [userId], references: [userId])
+}
+
+model OrderItem {
+  orderItemId String    @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String    @db.ObjectId
+  productId   String    @db.ObjectId
+  quantity    Int
+  price       Int
+  subtotal    Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  // Relational
+  order   Orders   @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  product Products @relation(fields: [productId], references: [productId])
 }

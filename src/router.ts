@@ -1,17 +1,94 @@
-import express from 'express';
+import express from 'express'
+import { users } from './features/users'
+import { products } from './features/products'
+import { reviews } from './features/reviews'
+import { carts } from './features/carts'
+import { orders } from './features/orders'
+import { UserImageUrl } from './utils/imageUrl'
 import {
-    createUserController,
-    deleteUserController,
-    getUserByIdController,
-    getUsersController,
-    updateUserController
-} from './controllers/users.controller';
+  validateUserLogin,
+  validateUserRegister
+} from './validation/userValidation'
+import { history } from './features/history'
+import { discus } from './features/discus'
+import { chatsRouter } from './routes/chats-routes'
 
 export const router = express.Router()
 
-router.post('/v1/users/register', createUserController);
-router.get('/v1/users', getUsersController);
-router.get('/v1/users/:id', getUserByIdController);
-router.patch('/v1/users/:id/update', updateUserController);
-router.delete('/v1/users/:id/delete', deleteUserController);
+router.use(chatsRouter)
 
+// grouping img url /public/
+const publicRouter = express.Router()
+router.use('/public', publicRouter)
+publicRouter.get('/user/:imageName', UserImageUrl)
+
+// grouping /v1/users
+const usersRouter = express.Router()
+router.use('/v1/users', usersRouter)
+// users router
+usersRouter.post('/register', validateUserRegister, users.createUserController)
+usersRouter.post('/login', validateUserLogin, users.loginUserController)
+usersRouter.get('', users.getAllUsersController)
+usersRouter.get('/search', users.getUserBySearchController)
+usersRouter.get('/:userId', users.getUserByUserIdController)
+usersRouter.patch('/:userId/update', users.updateUserController)
+usersRouter.put('/:userId/change-password', users.changePasswordController)
+usersRouter.put('/:userId/upload-image', users.uploadImageUserController)
+usersRouter.delete('/:userId/delete', users.deleteUserController)
+// history router
+usersRouter.post('/:userId/history', history.createHistoryController)
+usersRouter.get('/:userId/historys', history.getHistoryByHistoryIdController)
+usersRouter.delete(
+  '/:historyId/history/delete',
+  history.deleteHistoryController
+)
+
+// grouping /v1/products
+const productsRouter = express.Router()
+router.use('/v1/products', productsRouter)
+// products router
+productsRouter.post('', products.createProductController)
+productsRouter.get('', products.getAllProductController)
+productsRouter.get('/search', products.getProductBySearchController)
+productsRouter.get('/:productId', products.getProductByProductIdController)
+productsRouter.patch(
+  '/:productId/owner/:userId/update',
+  products.updateProductController
+)
+productsRouter.delete('/:productId/delete', products.deleteProductController)
+// reviews router
+productsRouter.get('/:productId/review', reviews.getReviewByIdController)
+productsRouter.post('/:productId/review', reviews.createReviewController)
+productsRouter.patch('/review/:reviewId/update', reviews.updateReviewController)
+productsRouter.delete(
+  '/review/:reviewId/delete',
+  reviews.deleteReviewController
+)
+// discus router
+productsRouter.get('/:productId/discus', discus.getDiscusByProductIdController)
+productsRouter.post('/:productId/discus/:userId', discus.createDiscusController)
+productsRouter.post(
+  '/:discusId/discus/:userId/reply',
+  discus.createReplyDiscusController
+)
+productsRouter.delete('/discus/:discusId/delete', discus.deleteDiscusController)
+
+// grouping /v1/carts
+const cartsRouter = express.Router()
+router.use('/v1/carts', cartsRouter)
+// carts router
+cartsRouter.post('', carts.createCartController)
+cartsRouter.get('', carts.getAllCartController)
+cartsRouter.get('/:cartId', carts.getCartByCartIdController)
+cartsRouter.patch('/:cartId/update', carts.updateCartController)
+cartsRouter.delete('/:cartId/delete', carts.deleteCartController)
+
+// grouping /v1/orders
+const ordersRouter = express.Router()
+router.use('/v1/orders', ordersRouter)
+// orders router
+ordersRouter.post('', orders.createOrderController)
+ordersRouter.get('', orders.getAllOrderController)
+ordersRouter.get('/:orderId', orders.getOrderByOrderIdController)
+ordersRouter.patch('/:orderId/update', orders.updateOrderController)
+ordersRouter.delete('/:orderId/delete', orders.deleteOrderController)

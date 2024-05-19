@@ -1,0 +1,13 @@
+build
+docs/specs
+node_modules
+public
+.prettierrc
+docker-compose.yaml
+eslint.config.mjs
+nodemon.json
+package.json
+pnpm-lock.yaml
+readme.md
+tsconfig.json
+vercel.json
