@@ -58,7 +58,7 @@ model DateOfBirth {
   id     String  @id @default(auto()) @map("_id") @db.ObjectId
   userId String? @db.ObjectId
   date   String?
-  moon   String?
+  month  String?
   year   String?
 
   // Relational

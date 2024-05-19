@@ -19,7 +19,7 @@ interface UserUpdateData {
   dateOfBirth?: {
     create: Array<{
       date: string
-      moon: string
+      month: string
       year: string
     }>
   }
@@ -43,7 +43,7 @@ export const updateUserService = async (
     bio: string
     dateOfBirth?: Array<{
       date: string
-      moon: string
+      month: string
       year: string
     }>
     gender?: 'pria' | 'wanita'

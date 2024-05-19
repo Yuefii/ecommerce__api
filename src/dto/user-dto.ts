@@ -14,7 +14,7 @@ export class UserDTO {
       date_of_birth: Array.isArray(result.dateOfBirth)
         ? result.dateOfBirth.map((item: any) => ({
             date: item.date,
-            moon: item.moon,
+            month: item.month,
             year: item.year
           }))
         : [],
@@ -68,7 +68,7 @@ export class UserDTO {
       date_of_birth: Array.isArray(result.dateOfBirth)
         ? result.dateOfBirth.map((item: any) => ({
             date: item.date,
-            moon: item.moon,
+            month: item.month,
             year: item.year
           }))
         : [],
