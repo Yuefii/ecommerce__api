@@ -1,21 +1,18 @@
 import express from 'express'
-import { users } from './features/users'
 import { products } from './features/products'
 import { reviews } from './features/reviews'
 import { carts } from './features/carts'
 import { orders } from './features/orders'
 import { UserImageUrl } from './utils/imageUrl'
-import {
-  validateUserLogin,
-  validateUserRegister
-} from './validation/userValidation'
 import { history } from './features/history'
 import { discus } from './features/discus'
 import { chatsRouter } from './routes/chats-routes'
+import { userRouter } from './routes/users-routes'
 
 export const router = express.Router()
 
 router.use(chatsRouter)
+router.use(userRouter)
 
 // grouping img url /public/
 const publicRouter = express.Router()
@@ -25,16 +22,6 @@ publicRouter.get('/user/:imageName', UserImageUrl)
 // grouping /v1/users
 const usersRouter = express.Router()
 router.use('/v1/users', usersRouter)
-// users router
-usersRouter.post('/register', validateUserRegister, users.createUserController)
-usersRouter.post('/login', validateUserLogin, users.loginUserController)
-usersRouter.get('', users.getAllUsersController)
-usersRouter.get('/search', users.getUserBySearchController)
-usersRouter.get('/:userId', users.getUserByUserIdController)
-usersRouter.patch('/:userId/update', users.updateUserController)
-usersRouter.put('/:userId/change-password', users.changePasswordController)
-usersRouter.put('/:userId/upload-image', users.uploadImageUserController)
-usersRouter.delete('/:userId/delete', users.deleteUserController)
 // history router
 usersRouter.post('/:userId/history', history.createHistoryController)
 usersRouter.get('/:userId/historys', history.getHistoryByHistoryIdController)

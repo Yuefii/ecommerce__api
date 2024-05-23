@@ -1,14 +1,12 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
-import { baseUrl } from '../utils/env'
-
 export class UserDTO {
   public fromGet(result: any) {
     return {
       user_id: result.userId,
       name: result.name,
       username: result.username,
-      avatar: baseUrl + 'public/user/' + result.imageUrl,
+      avatar: result.imageUrl,
       bio: result.bio,
       gender: result.gender,
       date_of_birth: Array.isArray(result.dateOfBirth)
@@ -62,7 +60,7 @@ export class UserDTO {
       user_id: result.userId,
       name: result.name,
       username: result.username,
-      avatar: baseUrl + 'public/user/' + result.imageUrl,
+      avatar: result.imageUrl,
       bio: result.bio,
       gender: result.gender,
       date_of_birth: Array.isArray(result.dateOfBirth)
@@ -92,7 +90,7 @@ export class UserDTO {
       user_id: result.userId,
       name: result.name,
       username: result.username,
-      avatar: baseUrl + 'public/user/' + result.imageUrl,
+      avatar: result.imageUrl,
       email: result.email,
       phone_number: result.phoneNumber,
       created_at: result.createdAt,
