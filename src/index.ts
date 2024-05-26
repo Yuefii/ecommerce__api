@@ -8,6 +8,7 @@ import swaggerjsdoc from 'swagger-jsdoc'
 
 import { router } from './router'
 import { options } from '../docs/swagger/options'
+import { HandleError } from './middleware/handle-error'
 
 dotenv.config()
 const app = express()
@@ -28,6 +29,7 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(router)
+app.use(HandleError)
 
 app.get('/ping', (req, res) => {
   res.status(200).json({

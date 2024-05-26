@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import prisma from '../../libs/prisma'
 
-import { ResponseError } from '../../error/responseError'
+import { ResponseError } from '../../error/response-error'
 import { UserUpdateData } from './types/user-update-type'
 import { jwtSecret } from '../../utils/env'
 
@@ -19,7 +19,7 @@ export class UserService {
       }
     })
     if (exitingUser) {
-      throw new ResponseError('Email already use.', 400)
+      throw new ResponseError(400, 'Email already use.')
     }
     const hashPassword = await bcrypt.hash(password, 12)
     const result = await prisma.users.create({
@@ -129,7 +129,7 @@ export class UserService {
     return await prisma.$transaction(async (prisma) => {
       if (gender) {
         if (gender !== 'pria' && gender !== 'wanita') {
-          throw new ResponseError('Gender must be either pria or wanita', 400)
+          throw new ResponseError(400, 'Gender must be either pria or wanita')
         }
         dataToUpdate.gender = gender
       }
@@ -139,7 +139,7 @@ export class UserService {
         })
         const newAddressesCount = address.length
         if (existingAddressesCount + newAddressesCount > 3) {
-          throw new ResponseError('User cannot have more than 3 addresses', 400)
+          throw new ResponseError(400, 'User cannot have more than 3 addresses')
         }
         dataToUpdate.address = {
           create: address
@@ -188,10 +188,10 @@ export class UserService {
       user?.password || ''
     )
     if (!passwordMatch) {
-      throw new ResponseError('old password does not match', 400)
+      throw new ResponseError(400, 'old password does not match')
     }
     if (newPassword !== confirmPassword) {
-      throw new ResponseError('Password does not match', 400)
+      throw new ResponseError(400, 'Password does not match')
     }
     const hashedPassword = await bcrypt.hash(newPassword, 12)
     const result = await prisma.users.update({
@@ -219,7 +219,7 @@ export class UserService {
   async loginUser(userData: { email: string; password: string }) {
     const { email, password } = userData
     if (!email && !password) {
-      throw new ResponseError('Email & Password not valid', 400)
+      throw new ResponseError(400, 'Email & Password not valid')
     }
     const user = await prisma.users.findUnique({
       where: {
@@ -227,11 +227,11 @@ export class UserService {
       }
     })
     if (!user) {
-      throw new ResponseError('Email doesnt exist', 400)
+      throw new ResponseError(400, 'Email doesnt exist')
     }
     const passwordMatch = await bcrypt.compare(password, user?.password)
     if (!passwordMatch) {
-      throw new ResponseError('Password not valid', 400)
+      throw new ResponseError(400, 'Password not valid')
     }
     const token = jwt.sign(
       {

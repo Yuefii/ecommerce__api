@@ -1,9 +1,8 @@
 import path from 'path'
 
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { UserService } from './user.service'
 import { UserDTO } from '../../dto/user-dto'
-import { ResponseError } from '../../error/responseError'
 import { bucket } from '../../libs/firebase'
 import { UploadedFile } from 'express-fileupload'
 
@@ -16,30 +15,22 @@ export class UserController {
     this.dto = new UserDTO()
   }
 
-  async createUser(req: Request, res: Response) {
+  async createUser(req: Request, res: Response, next: NextFunction) {
     try {
       const userData = req.body
       const result = await this.userService.createUser(userData)
       const response = this.dto.fromCreate(result)
       res.status(201).json({
         message: 'Successfully',
-        statusCode: 201,
+        status: 201,
         data: response
       })
     } catch (error) {
-      console.error(error)
-      if (error instanceof ResponseError) {
-        res.status(error.statusCode).json({
-          statusCode: error.statusCode,
-          error: error.message
-        })
-      } else {
-        res.status(500).json({ error: 'Internal server error' })
-      }
+      next(error)
     }
   }
 
-  async getAllUser(_req: Request, res: Response) {
+  async getAllUser(_req: Request, res: Response, next: NextFunction) {
     try {
       const result = await this.userService.getAllUser()
       const response = result.map((item) => this.dto.fromGet(item))
@@ -47,19 +38,11 @@ export class UserController {
         data: response
       })
     } catch (error) {
-      console.error(error)
-      if (error instanceof ResponseError) {
-        res.status(error.statusCode).json({
-          statusCode: error.statusCode,
-          error: error.message
-        })
-      } else {
-        res.status(500).json({ error: 'Internal server error' })
-      }
+      next(error)
     }
   }
 
-  async getUserById(req: Request, res: Response) {
+  async getUserById(req: Request, res: Response, next: NextFunction) {
     try {
       const { userId } = req.params
       const result = await this.userService.getUserById(userId)
@@ -68,12 +51,11 @@ export class UserController {
         data: response
       })
     } catch (error) {
-      console.error(error)
-      res.status(404).json({ error: 'User Id not found.' })
+      next(error)
     }
   }
 
-  async getUserBySearch(req: Request, res: Response) {
+  async getUserBySearch(req: Request, res: Response, next: NextFunction) {
     try {
       const keyword = req.query.q?.toString()
       const limit = req.query.limit ? parseInt(req.query.limit.toString()) : 10
@@ -87,12 +69,11 @@ export class UserController {
         throw new Error('invalid keyboard provided')
       }
     } catch (error) {
-      console.error(error)
-      res.status(500).json({ error: 'Internal server error' })
+      next(error)
     }
   }
 
-  async updateUser(req: Request, res: Response) {
+  async updateUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { userId } = req.params
       const userData = req.body
@@ -100,45 +81,29 @@ export class UserController {
       const response = this.dto.fromCreate(result)
       res.status(200).json({
         message: 'Successfully',
-        statusCode: 200,
+        status: 200,
         updated: response
       })
     } catch (error) {
-      console.error(error)
-      if (error instanceof ResponseError) {
-        res.status(error.statusCode).json({
-          statusCode: error.statusCode,
-          error: error.message
-        })
-      } else {
-        res.status(500).json({ error: 'Internal server error' })
-      }
+      next(error)
     }
   }
 
-  async changePasswordUser(req: Request, res: Response) {
+  async changePasswordUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { userId } = req.params
       const userData = req.body
       await this.userService.changePasswordUser(userId, userData)
       res.status(200).json({
         message: 'successfully',
-        statusCode: 200
+        status: 200
       })
     } catch (error) {
-      console.error(error)
-      if (error instanceof ResponseError) {
-        res.status(error.statusCode).json({
-          statusCode: error.statusCode,
-          error: error.message
-        })
-      } else {
-        res.status(500).json({ error: 'Internal server error' })
-      }
+      next(error)
     }
   }
 
-  async uploadImageUser(req: Request, res: Response) {
+  async uploadImageUser(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.files || !req.files.imageUrl) {
         return res.status(400).json({ error: 'No files uploaded.' })
@@ -183,58 +148,34 @@ export class UserController {
 
       blobStream.end(imageUrl.data)
     } catch (error) {
-      console.error(error)
-      if (error instanceof ResponseError) {
-        res.status(error.statusCode).json({
-          statusCode: error.statusCode,
-          error: error.message
-        })
-      } else {
-        res.status(500).json({ error: 'Internal server error' })
-      }
+      next(error)
     }
   }
 
-  async loginUser(req: Request, res: Response) {
+  async loginUser(req: Request, res: Response, next: NextFunction) {
     try {
       const userData = req.body
       const token = await this.userService.loginUser(userData)
       res.status(200).json({
         message: 'Successfully',
-        statusCode: 200,
+        status: 200,
         token: token
       })
     } catch (error) {
-      console.error(error)
-      if (error instanceof ResponseError) {
-        res.status(error.statusCode).json({
-          statusCode: error.statusCode,
-          error: error.message
-        })
-      } else {
-        res.status(500).json({ error: 'Internal server error' })
-      }
+      next(error)
     }
   }
 
-  async deleteUser(req: Request, res: Response) {
+  async deleteUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { userId } = req.params
       await this.userService.deleteUser(userId)
       res.status(200).json({
         message: 'Successfully',
-        statusCode: 200
+        status: 200
       })
     } catch (error) {
-      console.error(error)
-      if (error instanceof ResponseError) {
-        res.status(error.statusCode).json({
-          statusCode: error.statusCode,
-          error: error.message
-        })
-      } else {
-        res.status(500).json({ error: 'Internal server error' })
-      }
+      next(error)
     }
   }
 }

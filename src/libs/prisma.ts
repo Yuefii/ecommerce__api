@@ -1,9 +1,41 @@
+import { logger } from './winston'
 import { PrismaClient } from '@prisma/client'
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient }
+const prisma = new PrismaClient({
+  log: [
+    {
+      emit: 'event',
+      level: 'query'
+    },
+    {
+      emit: 'event',
+      level: 'error'
+    },
+    {
+      emit: 'event',
+      level: 'info'
+    },
+    {
+      emit: 'event',
+      level: 'warn'
+    }
+  ]
+})
 
-export const prisma = globalForPrisma.prisma || new PrismaClient()
+prisma.$on('error', (e) => {
+  logger.error(e)
+})
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+prisma.$on('warn', (e) => {
+  logger.warn(e)
+})
+
+prisma.$on('info', (e) => {
+  logger.info(e)
+})
+
+prisma.$on('query', (e) => {
+  logger.info(e)
+})
 
 export default prisma

@@ -1,21 +1,15 @@
 import express from 'express'
 import { UserController } from '../features/users/user.controller'
-import {
-  validateUserLogin,
-  validateUserRegister
-} from '../validation/userValidation'
 
 const userController = new UserController()
 export const userRouter = express.Router()
 
 userRouter.post(
   '/v1/users/register',
-  validateUserRegister,
   userController.createUser.bind(userController)
 )
 userRouter.post(
   '/v1/users/login',
-  validateUserLogin,
   userController.loginUser.bind(userController)
 )
 userRouter.get('/v1/users', userController.getAllUser.bind(userController))
