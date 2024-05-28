@@ -1,27 +1,35 @@
+import { logger } from '../libs/winston'
 import { ZodError } from 'zod'
 import { ResponseError } from '../error/response-error'
-import { Response, Request } from 'express'
-import { logger } from '../libs/winston'
+import { Response, Request, NextFunction } from 'express'
 
-export const HandleError = async (
+export const HandleError = (
   error: Error,
-  req: Request,
-  res: Response
+  _req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
   if (error instanceof ZodError) {
-    logger.error(error.message)
+    const formattedErrors = error.errors.map((err) => ({
+      path: err.path.join('.'),
+      message: err.message
+    }))
+
+    logger.error(formattedErrors)
     res.status(400).json({
-      errors: `Validation Error : ${JSON.stringify(error)}`
+      errors: formattedErrors
     })
+    next()
   } else if (error instanceof ResponseError) {
     logger.error(error.message)
     res.status(error.status).json({
       errors: error.message
     })
+    next()
   } else {
     logger.error(error.message)
     res.status(500).json({
-      errors: error.message
+      errors: 'Internal Server Error'
     })
   }
 }

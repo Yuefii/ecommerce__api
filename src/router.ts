@@ -3,21 +3,13 @@ import { products } from './features/products'
 import { reviews } from './features/reviews'
 import { carts } from './features/carts'
 import { orders } from './features/orders'
-import { UserImageUrl } from './utils/imageUrl'
 import { history } from './features/history'
 import { discus } from './features/discus'
 import { chatsRouter } from './routes/chats-routes'
-import { userRouter } from './routes/users-routes'
 
 export const router = express.Router()
 
 router.use(chatsRouter)
-router.use(userRouter)
-
-// grouping img url /public/
-const publicRouter = express.Router()
-router.use('/public', publicRouter)
-publicRouter.get('/user/:imageName', UserImageUrl)
 
 // grouping /v1/users
 const usersRouter = express.Router()
