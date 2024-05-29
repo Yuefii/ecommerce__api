@@ -3,24 +3,12 @@ import { products } from './features/products'
 import { reviews } from './features/reviews'
 import { carts } from './features/carts'
 import { orders } from './features/orders'
-import { history } from './features/history'
 import { discus } from './features/discus'
 import { chatsRouter } from './routes/chats-routes'
 
 export const router = express.Router()
 
 router.use(chatsRouter)
-
-// grouping /v1/users
-const usersRouter = express.Router()
-router.use('/v1/users', usersRouter)
-// history router
-usersRouter.post('/:userId/history', history.createHistoryController)
-usersRouter.get('/:userId/historys', history.getHistoryByHistoryIdController)
-usersRouter.delete(
-  '/:historyId/history/delete',
-  history.deleteHistoryController
-)
 
 // grouping /v1/products
 const productsRouter = express.Router()
