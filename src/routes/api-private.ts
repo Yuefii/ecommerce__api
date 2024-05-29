@@ -1,5 +1,6 @@
 import express from 'express'
 import { UserController } from '../features/users/user.controller'
+import { HistoryController } from '../features/history/history.controller'
 import { Auth } from '../middleware/auth'
 
 export const privateRouter = express.Router()
