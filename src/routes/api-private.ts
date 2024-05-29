@@ -13,3 +13,10 @@ privateRouter.put(
 privateRouter.delete('/v1/users/:userId/delete', UserController.delete)
 privateRouter.patch('/v1/users/:userId/update', UserController.update)
 privateRouter.put('/v1/users/:userId/upload-image', UserController.uploadImage)
+// history
+privateRouter.post('/v1/users/:userId/history', HistoryController.create)
+privateRouter.get('/v1/users/:userId/historys', HistoryController.getById)
+privateRouter.delete(
+  '/v1/users/:historyId/history/delete',
+  HistoryController.delete
+)
