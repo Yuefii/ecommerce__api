@@ -1,4 +1,4 @@
-import { ChatService } from './chat-service'
+import { ChatService } from './chat.service'
 import { NextFunction, Request, Response } from 'express'
 
 export class ChatController {

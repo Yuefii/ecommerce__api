@@ -1,18 +1,59 @@
 import prisma from '../../libs/prisma'
+import * as dto from '../../dto/chats/message-dto'
+import { Validation } from '../../utils/validation'
+import { MessageValidation } from '../../validation/message-validation'
+import { ResponseError } from '../../error/response-error'
 
 export class MessageService {
-  static async createMessage(text: string, chatId: string, senderId: string) {
-    const result = await prisma.messages.create({
-      data: {
-        text,
-        chatId,
-        senderId
+  static async create(
+    request: dto.MessageRequest,
+    chatId: string,
+    senderId: string
+  ): Promise<dto.CreateMessageResponse> {
+    const CreateMessageRequest = Validation.validate(
+      MessageValidation.CREATE,
+      request
+    )
+    const chatIdExist = await prisma.messages.findFirst({
+      where: {
+        chatId: chatId
       }
     })
-    return result
+    const userIdExist = await prisma.users.findFirst({
+      where: {
+        userId: senderId
+      }
+    })
+    if (!chatIdExist || !userIdExist) {
+      throw new ResponseError(
+        404,
+        `Chat with id ${chatId} & sender with id ${senderId} not found`
+      )
+    }
+    const result = await prisma.messages.create({
+      data: {
+        text: CreateMessageRequest.text,
+        chatId,
+        senderId
+      },
+      include: {
+        sender: true
+      }
+    })
+    return dto.toCreateMessageResponse(result)
   }
 
-  static async getMessageByChatId(chatId: string) {
+  static async getMessage(
+    chatId: string
+  ): Promise<dto.CreateMessageResponse[]> {
+    const chatIdExist = await prisma.messages.findFirst({
+      where: {
+        chatId: chatId
+      }
+    })
+    if (!chatIdExist) {
+      throw new ResponseError(404, `Chat with id ${chatId} not found`)
+    }
     const result = await prisma.messages.findMany({
       where: {
         chatId
@@ -21,6 +62,6 @@ export class MessageService {
         sender: true
       }
     })
-    return result
+    return result.map(dto.toCreateMessageResponse)
   }
 }

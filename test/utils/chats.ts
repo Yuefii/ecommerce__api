@@ -1,4 +1,3 @@
-import { bucket } from '../../src/libs/firebase'
 import prisma from '../../src/libs/prisma'
 import bcrypt from 'bcrypt'
 
