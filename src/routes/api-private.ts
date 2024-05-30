@@ -2,6 +2,7 @@ import express from 'express'
 import { UserController } from '../features/users/user.controller'
 import { Auth } from '../middleware/auth'
 import { HistoryController } from '../features/history/history.controller'
+import { ChatController } from '../features/chats/chat-controller'
 
 export const privateRouter = express.Router()
 privateRouter.use(Auth)
@@ -21,3 +22,6 @@ privateRouter.delete(
   '/v1/users/:historyId/history/delete',
   HistoryController.delete
 )
+// Chats
+privateRouter.post('/v1/chats/room/create', ChatController.create)
+privateRouter.get('/v1/chats/:userId/room', ChatController.getAllById)

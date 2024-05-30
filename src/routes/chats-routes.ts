@@ -16,7 +16,3 @@ chatsRouter.get(
   '/v1/chats/room/:chatId/message',
   chatController.getMessageByChatId.bind(chatController)
 )
-chatsRouter.get(
-  '/v1/chats/room',
-  chatController.getAllRoomChats.bind(chatController)
-)
