@@ -50,6 +50,22 @@ export class MessageTest {
     })
   }
 
+  static async deleteChat(chatId) {
+    await prisma.chat.deleteMany({
+      where: {
+        chatId: chatId
+      }
+    })
+  }
+
+  static async deleteMessage(messageId) {
+    await prisma.messages.deleteMany({
+      where: {
+        messageId: messageId
+      }
+    })
+  }
+
   static async createChat(userId1, userId2) {
     const result = await prisma.chat.create({
       data: {
@@ -63,12 +79,13 @@ export class MessageTest {
 
   static async createMessage(chatId) {
     const user1Id = await this.findUniqueUser1()
-    await prisma.messages.create({
+    const result = await prisma.messages.create({
       data: {
         text: 'hello testing',
         chatId: chatId,
         senderId: user1Id
       }
     })
+    return result.messageId
   }
 }

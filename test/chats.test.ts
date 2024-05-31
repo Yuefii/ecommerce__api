@@ -9,6 +9,7 @@ describe('POST /v1/chats/room/create', () => {
   let token
   let userId1
   let userId2
+  let chatId
   const userIdNotFound = '66548e25c0a2bbef3bffe532'
 
   beforeEach(async () => {
@@ -20,6 +21,9 @@ describe('POST /v1/chats/room/create', () => {
   })
 
   afterEach(async () => {
+    if (chatId) {
+      await ChatTest.deleteChat(chatId)
+    }
     await ChatTest.deleteUser1()
     await ChatTest.deleteUser2()
   })
@@ -40,6 +44,8 @@ describe('POST /v1/chats/room/create', () => {
     expect(response.body.data).toHaveProperty('created_at')
     expect(response.body.data.participants).toHaveProperty('user_id1')
     expect(response.body.data.participants).toHaveProperty('user_id2')
+
+    chatId = response.body.data.chat_id
   })
 
   it('Should throw an error if at least two participants are required', async () => {

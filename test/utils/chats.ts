@@ -16,6 +16,13 @@ export class ChatTest {
       }
     })
   }
+  static async deleteChat(chatId) {
+    await prisma.chat.deleteMany({
+      where: {
+        chatId: chatId
+      }
+    })
+  }
 
   static async createUser1() {
     await prisma.users.create({
