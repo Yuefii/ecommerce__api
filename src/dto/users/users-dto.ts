@@ -1,4 +1,4 @@
-import { Address, DateOfBirth, Users } from '@prisma/client'
+import { Address, DateOfBirth, Products, Users } from '@prisma/client'
 
 export type UserResponse = {
   user_id?: string | null
@@ -22,6 +22,11 @@ export type UserResponse = {
     date?: string | null
     month?: string | null
     year?: string | null
+  }>
+  products?: Array<{
+    product_id?: string | null
+    name?: string | null
+    category?: string | null
   }>
   created_at: Date
   updated_at?: Date | null
@@ -75,7 +80,7 @@ export type ChangePasswordUserRequest = {
   confirmPassword: string
 }
 
-export function toCreateUserResoinse(user: Users): CreateUserResponse {
+export function toCreateUserResponse(user: Users): CreateUserResponse {
   return {
     user_id: user.userId,
     name: user.name,
@@ -84,7 +89,11 @@ export function toCreateUserResoinse(user: Users): CreateUserResponse {
 }
 
 export function toUserResponse(
-  user: Users & { address: Address[]; dateOfBirth: DateOfBirth[] }
+  user: Users & {
+    address: Address[]
+    dateOfBirth: DateOfBirth[]
+    products: Products[]
+  }
 ): UserResponse {
   return {
     user_id: user.userId,
@@ -108,6 +117,11 @@ export function toUserResponse(
       date: item.date,
       month: item.month,
       year: item.year
+    })),
+    products: user.products.map((item) => ({
+      product_id: item.productId,
+      name: item.nama,
+      category: item.category
     })),
     created_at: user.createdAt,
     updated_at: user.updateAt

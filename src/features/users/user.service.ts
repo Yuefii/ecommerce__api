@@ -32,7 +32,7 @@ export class UserService {
     const result = await prisma.users.create({
       data: createRequest
     })
-    return dto.toCreateUserResoinse(result)
+    return dto.toCreateUserResponse(result)
   }
 
   static async login(request: dto.LoginUserRequest) {
@@ -115,7 +115,8 @@ export class UserService {
       },
       include: {
         address: true,
-        dateOfBirth: true
+        dateOfBirth: true,
+        products: true
       }
     })
     if (!result) {
@@ -193,7 +194,8 @@ export class UserService {
           data: dataToUpdate,
           include: {
             dateOfBirth: true,
-            address: true
+            address: true,
+            products: true
           }
         })
         return dto.toUserResponse(result)
