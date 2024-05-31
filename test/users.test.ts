@@ -92,7 +92,7 @@ describe('PUT /v1/users/${userId}/change-password', () => {
     await UserTest.delete()
   })
 
-  it('Should change new password user success', async () => {
+  it('Should throw an error if new password cannot be the same as the current password', async () => {
     const response = await supertest(app)
       .put(`/v1/users/${userId}/change-password`)
       .set('Authorization', `Bearer ${token}`)
@@ -103,9 +103,11 @@ describe('PUT /v1/users/${userId}/change-password', () => {
       })
 
     logger.debug(response.body)
-    expect(response.status).toBe(200)
-    expect(response.body).toHaveProperty('message')
-    expect(response.body.message).toBe('Successfully')
+    expect(response.status).toBe(400)
+    expect(response.body).toHaveProperty('errors')
+    expect(response.body.errors).toBe(
+      'New password cannot be the same as the current password'
+    )
   })
 
   it('Should throw an error if current password doesnt match', async () => {
@@ -156,6 +158,22 @@ describe('PUT /v1/users/${userId}/change-password', () => {
       `User with id ${userIdNotFound} not found`
     )
   })
+
+  it('Should be able change password user success', async () => {
+    const response = await supertest(app)
+      .put(`/v1/users/${userId}/change-password`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        currentPassword: 'unittesting',
+        newPassword: 'unittestingsuccess',
+        confirmPassword: 'unittestingsuccess'
+      })
+
+    logger.debug(response.body)
+    expect(response.status).toBe(200)
+    expect(response.body).toHaveProperty('message')
+    expect(response.body.message).toBe('Successfully')
+  })
 })
 
 describe('GET /v1/users/${userId}', () => {
@@ -190,8 +208,34 @@ describe('GET /v1/users/${userId}', () => {
     expect(response.body.data).toHaveProperty('bio')
     expect(response.body.data).toHaveProperty('gender')
     expect(response.body.data).toHaveProperty('phone_number')
+    expect(response.body.data).toHaveProperty('address')
+    expect(response.body.data).toHaveProperty('date_of_birth')
+    expect(response.body.data).toHaveProperty('products')
     expect(response.body.data).toHaveProperty('created_at')
     expect(response.body.data).toHaveProperty('updated_at')
+
+    expect(Array.isArray(response.body.data.address)).toBe(true)
+    expect(Array.isArray(response.body.data.date_of_birth)).toBe(true)
+    expect(Array.isArray(response.body.data.products)).toBe(true)
+
+    response.body.data.address.forEach((item) => {
+      expect(item).toHaveProperty('address_id')
+      expect(item).toHaveProperty('address_label')
+      expect(item).toHaveProperty('address_complete')
+      expect(item).toHaveProperty('note_to_courier')
+      expect(item.message).toHaveProperty('receiper_name')
+      expect(item.message).toHaveProperty('phone_number')
+    })
+    response.body.data.date_of_birth.forEach((item) => {
+      expect(item).toHaveProperty('date')
+      expect(item).toHaveProperty('month')
+      expect(item).toHaveProperty('year')
+    })
+    response.body.data.products.forEach((item) => {
+      expect(item).toHaveProperty('product_id')
+      expect(item).toHaveProperty('name')
+      expect(item).toHaveProperty('category')
+    })
   })
 
   it('Should throw an error if Id not found', async () => {

@@ -32,7 +32,7 @@ export class UserService {
     const result = await prisma.users.create({
       data: createRequest
     })
-    return dto.toCreateUserResoinse(result)
+    return dto.toCreateUserResponse(result)
   }
 
   static async login(request: dto.LoginUserRequest) {
@@ -85,6 +85,20 @@ export class UserService {
     if (request.newPassword !== request.confirmPassword) {
       throw new ResponseError(400, 'Password does not match')
     }
+    const isSameAsCurrentPassword = await bcrypt.compare(
+      request.newPassword && request.confirmPassword,
+      user.password
+    )
+    if (isSameAsCurrentPassword) {
+      throw new ResponseError(
+        400,
+        'New password cannot be the same as the current password'
+      )
+    }
+    }
+    if (request.newPassword !== request.confirmPassword) {
+      throw new ResponseError(400, 'Password does not match')
+    }
     const hashedPassword = await bcrypt.hash(request.newPassword, 12)
     const result = await prisma.users.update({
       where: {
@@ -104,7 +118,8 @@ export class UserService {
       },
       include: {
         address: true,
-        dateOfBirth: true
+        dateOfBirth: true,
+        products: true
       }
     })
     if (!result) {
@@ -182,7 +197,8 @@ export class UserService {
           data: dataToUpdate,
           include: {
             dateOfBirth: true,
-            address: true
+            address: true,
+            products: true
           }
         })
         return dto.toUserResponse(result)
