@@ -95,7 +95,10 @@ export class UserService {
         'New password cannot be the same as the current password'
       )
     }
-
+    }
+    if (request.newPassword !== request.confirmPassword) {
+      throw new ResponseError(400, 'Password does not match')
+    }
     const hashedPassword = await bcrypt.hash(request.newPassword, 12)
     const result = await prisma.users.update({
       where: {
