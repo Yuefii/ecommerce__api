@@ -92,7 +92,7 @@ describe('PUT /v1/users/${userId}/change-password', () => {
     await UserTest.delete()
   })
 
-  it('Should change new password user success', async () => {
+  it('Should throw an error if new password cannot be the same as the current password', async () => {
     const response = await supertest(app)
       .put(`/v1/users/${userId}/change-password`)
       .set('Authorization', `Bearer ${token}`)
@@ -103,9 +103,11 @@ describe('PUT /v1/users/${userId}/change-password', () => {
       })
 
     logger.debug(response.body)
-    expect(response.status).toBe(200)
-    expect(response.body).toHaveProperty('message')
-    expect(response.body.message).toBe('Successfully')
+    expect(response.status).toBe(400)
+    expect(response.body).toHaveProperty('errors')
+    expect(response.body.errors).toBe(
+      'New password cannot be the same as the current password'
+    )
   })
 
   it('Should throw an error if current password doesnt match', async () => {
@@ -155,6 +157,22 @@ describe('PUT /v1/users/${userId}/change-password', () => {
     expect(response.body.errors).toBe(
       `User with id ${userIdNotFound} not found`
     )
+  })
+
+  it('Should be able change password user success', async () => {
+    const response = await supertest(app)
+      .put(`/v1/users/${userId}/change-password`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        currentPassword: 'unittesting',
+        newPassword: 'unittestingsuccess',
+        confirmPassword: 'unittestingsuccess'
+      })
+
+    logger.debug(response.body)
+    expect(response.status).toBe(200)
+    expect(response.body).toHaveProperty('message')
+    expect(response.body.message).toBe('Successfully')
   })
 })
 
