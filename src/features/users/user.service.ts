@@ -95,7 +95,6 @@ export class UserService {
         'New password cannot be the same as the current password'
       )
     }
-
     const hashedPassword = await bcrypt.hash(request.newPassword, 12)
     const result = await prisma.users.update({
       where: {
