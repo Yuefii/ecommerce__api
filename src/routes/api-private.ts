@@ -4,6 +4,7 @@ import { Auth } from '../middleware/auth'
 import { HistoryController } from '../features/history/history.controller'
 import { ChatController } from '../features/chats/chat.controller'
 import { MessageControler } from '../features/chats/message.controller'
+import { AddressController } from '../features/users/address.controller'
 
 export const privateRouter = express.Router()
 privateRouter.use(Auth)
@@ -16,6 +17,14 @@ privateRouter.put(
 privateRouter.delete('/v1/users/:userId/delete', UserController.delete)
 privateRouter.patch('/v1/users/:userId/update', UserController.update)
 privateRouter.put('/v1/users/:userId/upload-image', UserController.uploadImage)
+privateRouter.put(
+  '/v1/users/:userId/address/:addressId/update',
+  AddressController.update
+)
+privateRouter.delete(
+  '/v1/users/:userId/address/:addressId/delete',
+  AddressController.delete
+)
 // history
 privateRouter.post('/v1/users/:userId/history', HistoryController.create)
 privateRouter.get('/v1/users/:userId/historys', HistoryController.getById)
