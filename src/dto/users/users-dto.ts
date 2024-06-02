@@ -14,9 +14,11 @@ export type UserResponse = {
     address_id?: string | null
     address_label?: string | null
     address_complete?: string | null
+    regency?: string | null
     note_to_courier?: string | null
     receiper_name?: string | null
     phone_number?: string | null
+    is_selected?: boolean
   }>
   date_of_birth?: Array<{
     date?: string | null
@@ -52,9 +54,11 @@ export type UpdateUserRequest = {
     create: Array<{
       addressLabel?: string
       addressComplete?: string
+      regency?: string
       noteToCourier?: string
       receiperName?: string
       phoneNumber?: string
+      isSelected?: boolean
     }>
   }
   phoneNumber: string
@@ -109,9 +113,11 @@ export function toUserResponse(
       address_id: item.id,
       address_label: item.addressLabel,
       address_complete: item.addressComplete,
+      regency: item.regency,
       note_to_courier: item.noteToCourier,
       receiper_name: item.receiperName,
-      phone_number: item.phoneNumber
+      phone_number: item.phoneNumber,
+      is_selected: item.isSelected
     })),
     date_of_birth: user.dateOfBirth.map((item) => ({
       date: item.date,

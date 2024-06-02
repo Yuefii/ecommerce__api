@@ -5,7 +5,7 @@ import { app } from '../src/libs/express'
 import { logger } from '../src/libs/winston'
 import { AddressTest } from './utils/address'
 
-describe('PUT /v1/users/:userId/address/:addressId/update', () => {
+describe('PATCH /v1/users/:userId/address/:addressId/update', () => {
   let token
   let userId
   let addressId
@@ -25,11 +25,12 @@ describe('PUT /v1/users/:userId/address/:addressId/update', () => {
 
   it('Should be able update address success', async () => {
     const response = await supertest(app)
-      .put(`/v1/users/${userId}/address/${addressId}/update`)
+      .patch(`/v1/users/${userId}/address/${addressId}/update`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         addressLabel: 'testing update success',
         addressComplete: 'testing update success',
+        regency: 'kab.tangerang',
         noteToCourier: 'testing update success',
         receiperName: 'testing update success',
         phoneNumber: '0888222222'
@@ -43,18 +44,21 @@ describe('PUT /v1/users/:userId/address/:addressId/update', () => {
     expect(response.body.updated).toHaveProperty('user_id')
     expect(response.body.updated).toHaveProperty('address_label')
     expect(response.body.updated).toHaveProperty('address_complete')
+    expect(response.body.updated).toHaveProperty('regency')
     expect(response.body.updated).toHaveProperty('note_to_courier')
     expect(response.body.updated).toHaveProperty('receiper_name')
     expect(response.body.updated).toHaveProperty('phone_number')
+    expect(response.body.updated).toHaveProperty('is_selected')
   })
 
   it('Should throw an error if User with id & address with id not found', async () => {
     const response = await supertest(app)
-      .put(`/v1/users/${userIdNotFound}/address/${addressId}/update`)
+      .patch(`/v1/users/${userIdNotFound}/address/${addressId}/update`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         addressLabel: 'testing update success',
         addressComplete: 'testing update success',
+        regency: 'kab.tangerang',
         noteToCourier: 'testing update success',
         receiperName: 'testing update success',
         phoneNumber: '0888222222'
