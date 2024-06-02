@@ -25,6 +25,7 @@ export class AddressTest {
           create: {
             addressLabel: 'testing update',
             addressComplete: 'testing update',
+            regency: 'kab.tangerang',
             noteToCourier: 'testing update',
             receiperName: 'testing update',
             phoneNumber: '0888222222'

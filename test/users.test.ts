@@ -284,9 +284,11 @@ describe('PATCH /v1/users/${userId}/update', () => {
           {
             addressLabel: 'kantor',
             addressComplete: 'jln. raya testing update',
+            regency: 'kab.testing',
             noteToCourier: 'taro diluar karna tidak ada orang',
             receiperName: 'testing',
-            phoneNumber: '0887676767676'
+            phoneNumber: '0887676767676',
+            isSelected: true
           }
         ],
         dateOfBirth: [
@@ -323,9 +325,11 @@ describe('PATCH /v1/users/${userId}/update', () => {
       expect(address).toHaveProperty('address_id')
       expect(address).toHaveProperty('address_label')
       expect(address).toHaveProperty('address_complete')
+      expect(address).toHaveProperty('regency')
       expect(address).toHaveProperty('note_to_courier')
       expect(address).toHaveProperty('receiper_name')
       expect(address).toHaveProperty('phone_number')
+      expect(address).toHaveProperty('is_selected')
     })
 
     expect(Array.isArray(response.body.updated.date_of_birth)).toBe(true)

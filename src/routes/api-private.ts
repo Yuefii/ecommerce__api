@@ -17,7 +17,7 @@ privateRouter.put(
 privateRouter.delete('/v1/users/:userId/delete', UserController.delete)
 privateRouter.patch('/v1/users/:userId/update', UserController.update)
 privateRouter.put('/v1/users/:userId/upload-image', UserController.uploadImage)
-privateRouter.put(
+privateRouter.patch(
   '/v1/users/:userId/address/:addressId/update',
   AddressController.update
 )

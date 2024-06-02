@@ -49,6 +49,8 @@ model Address {
   noteToCourier   String?
   receiperName    String?
   phoneNumber     String?
+  regency         String?
+  isSelected      Boolean @default(false)
 
   // Relational
   Users Users? @relation(fields: [userId], references: [userId])
