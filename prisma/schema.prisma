@@ -134,12 +134,11 @@ model DiscusType {
 model Products {
   productId   String      @id @default(auto()) @map("_id") @db.ObjectId
   ownerId     String      @db.ObjectId
-  nama        String
+  name        String
   description String
   price       Int
   brand       String
   category    String
-  quantity    Int
   images      Images[]
   discus      Discus[]
   review      Reviews[]
@@ -155,8 +154,8 @@ model Products {
 model Images {
   imgId     String @id @default(auto()) @map("_id") @db.ObjectId
   productId String @db.ObjectId
-  color     String
-  colorCode String
+  name      String
+  quantity  Int
   url       String
 
   // Relational

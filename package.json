@@ -12,7 +12,7 @@
     "lint": "pnpx eslint .",
     "lint:fix": "pnpx eslint . --fix",
     "format": "pnpx prettier . --write",
-    "prepare": "pnpm exec husky init",
+    "prepare": "husky",
     "check-types": "npx tsc --noEmit --pretty",
     "check-lint": "pnpx eslint .",
     "check-format": "pnpx prettier . --check"
