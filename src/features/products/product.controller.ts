@@ -4,7 +4,6 @@ import { ProductService } from './product.service'
 import * as dto from '../../dto/products/product-dto'
 
 export class ProductController {
-
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { ownerId } = req.params
@@ -34,6 +33,28 @@ export class ProductController {
       next(error)
     }
   }
+  static async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { productId } = req.params
+      await ProductService.delete(productId)
+      res.status(200).json({
+        message: 'Successfully'
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async getAll(_req: Request, res: Response, next: NextFunction) {
+    try {
+      const response = await ProductService.getAll()
+      res.status(200).json({
+        data: response
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
 
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
@@ -46,16 +67,22 @@ export class ProductController {
       next(error)
     }
   }
-  
-  static async getAll(_req: Request, res: Response, next: NextFunction) {
+  static async getBySearch(req: Request, res: Response, next: NextFunction) {
     try {
-      const response = await ProductService.getAll()
-      res.status(200).json({
-        data: response
-      })
+      const keyword: string | undefined = req.query.q?.toString()
+      const limit: number = req.query.limit
+        ? parseInt(req.query.limit.toString())
+        : 10
+      if (keyword) {
+        const response = await ProductService.getBySearch(keyword, limit)
+        res.status(200).json({
+          data: response
+        })
+      } else {
+        throw new Error('Invalid keyword provided')
+      }
     } catch (error) {
       next(error)
     }
   }
 }
-

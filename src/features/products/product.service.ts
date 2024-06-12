@@ -9,7 +9,6 @@ import { ResponseError } from '../../error/response-error'
 import { ProductValidation } from '../../validation/product-validation'
 
 export class ProductService {
-
   static async uploadProductImages(
     imageFiles: UploadedFile[]
   ): Promise<string[]> {
@@ -129,6 +128,22 @@ export class ProductService {
     return dto.toProductResponse(result)
   }
 
+  static async delete(productId: string) {
+    const productExist = await prisma.products.findFirst({
+      where: {
+        productId
+      }
+    })
+    if (!productExist) {
+      throw new ResponseError(404, `Product with id ${productId} not found`)
+    }
+    await prisma.products.delete({
+      where: {
+        productId
+      }
+    })
+  }
+
   static async getAll(): Promise<dto.ProductResponse[]> {
     const result = await prisma.products.findMany({
       include: {
@@ -153,5 +168,41 @@ export class ProductService {
       return null
     }
     return dto.toProductResponse(result)
+  }
+
+  static async getBySearch(
+    keyword: string,
+    limit: number
+  ): Promise<dto.ProductResponse[]> {
+    const result = await prisma.products.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: keyword,
+              mode: 'insensitive'
+            },
+            description: {
+              contains: keyword,
+              mode: 'insensitive'
+            },
+            brand: {
+              contains: keyword,
+              mode: 'insensitive'
+            },
+            category: {
+              contains: keyword,
+              mode: 'insensitive'
+            }
+          }
+        ]
+      },
+      include: {
+        images: true,
+        owner: true
+      },
+      take: limit
+    })
+    return result.map(dto.toProductResponse)
   }
 }
