@@ -44,3 +44,4 @@ privateRouter.post(
 privateRouter.get('/v1/chats/room/:chatId/message', MessageControler.getById)
 // Products
 privateRouter.post('/v1/products/:ownerId', ProductController.create)
+privateRouter.patch('/v1/products/:productId/owner/:ownerId/update', ProductController.update)

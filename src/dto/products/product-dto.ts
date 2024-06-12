@@ -1,4 +1,4 @@
-import { Images, Products } from '@prisma/client'
+import { Images, Products, Users } from '@prisma/client'
 import { UploadedFile } from 'express-fileupload'
 
 export type ProductResponse = {
@@ -14,6 +14,11 @@ export type ProductResponse = {
     quantity: number | 0
     img_url: string | null
   }>
+  owner: {
+    user_id: string
+    name: string | null
+    username: string | null
+  }
   created_at: Date
   updated_at: Date
 }
@@ -29,7 +34,7 @@ export type CreateProductRequest = {
 }
 
 export function toProductResponse(
-  product: Products & { images: Images[] }
+  product: Products & { images: Images[], owner: Users }
 ): ProductResponse {
   return {
     product_id: product.productId,
@@ -44,6 +49,11 @@ export function toProductResponse(
       quantity: item.quantity,
       img_url: item.url
     })),
+    owner: {
+      user_id: product.owner.userId,
+      name: product.owner.name,
+      username: product.owner.username,
+    },
     created_at: product.createdAt,
     updated_at: product.updateAt
   }

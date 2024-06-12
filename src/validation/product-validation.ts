@@ -8,4 +8,11 @@ export class ProductValidation {
         brand: z.string(),
         category: z.string(),
     })
+    static readonly UPDATE: ZodType = z.object({
+        name: z.string().optional(),
+        description: z.string().optional(),
+        price: z.number().min(0).optional(),
+        brand: z.string().optional(),
+        category: z.string().optional(),
+    })
 }

@@ -9,6 +9,7 @@ import { ResponseError } from '../../error/response-error'
 import { ProductValidation } from '../../validation/product-validation'
 
 export class ProductService {
+
   static async uploadProductImages(
     imageFiles: UploadedFile[]
   ): Promise<string[]> {
@@ -87,7 +88,42 @@ export class ProductService {
         }
       },
       include: {
-        images: true
+        images: true,
+        owner: true
+      }
+    })
+    return dto.toProductResponse(result)
+  }
+
+  static async update(
+    productId: string,
+    ownerId: string,
+    request: dto.CreateProductRequest
+  ): Promise<dto.ProductResponse> {
+    const createRequest = Validation.validate(ProductValidation.UPDATE, request)
+    const userExist = await prisma.users.findFirst({
+      where: {
+        userId: ownerId
+      }
+    })
+    if (!userExist) {
+      throw new ResponseError(404, `User with id ${ownerId} not found`)
+    }
+    const result = await prisma.products.update({
+      where: {
+        productId
+      },
+      data: {
+        ownerId,
+        name: createRequest.name,
+        description: createRequest.description,
+        brand: createRequest.brand,
+        price: createRequest.price,
+        category: createRequest.category
+      },
+      include: {
+        images: true,
+        owner: true
       }
     })
     return dto.toProductResponse(result)
@@ -103,16 +139,19 @@ export class ProductService {
     return result.map(dto.toProductResponse)
   }
 
-  // static async getById(productId: string): Promise<dto.ProductResponse> {
-  //   const result = await prisma.products.findMany({
-  //     where: {
-  //       productId
-  //     },
-  //     include: {
-  //       images: true,
-  //       owner: true
-  //     }
-  //   })
-  //   return dto.toProductResponse(result)
-  // }
+  static async getById(productId: string): Promise<dto.ProductResponse | null> {
+    const result = await prisma.products.findUnique({
+      where: {
+        productId
+      },
+      include: {
+        images: true,
+        owner: true
+      }
+    })
+    if (!result) {
+      return null
+    }
+    return dto.toProductResponse(result)
+  }
 }
