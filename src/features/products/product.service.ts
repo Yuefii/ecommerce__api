@@ -88,7 +88,23 @@ export class ProductService {
       },
       include: {
         images: true,
-        owner: true
+        owner: true,
+        review: {
+          include: {
+            users: true
+          }
+        },
+        discus: {
+          include: {
+            Users: true,
+            discusType: true,
+            reply: {
+              include: {
+                Users: true
+              }
+            }
+          }
+        }
       }
     })
     return dto.toProductResponse(result)
@@ -122,7 +138,23 @@ export class ProductService {
       },
       include: {
         images: true,
-        owner: true
+        owner: true,
+        review: {
+          include: {
+            users: true
+          }
+        },
+        discus: {
+          include: {
+            Users: true,
+            discusType: true,
+            reply: {
+              include: {
+                Users: true
+              }
+            }
+          }
+        }
       }
     })
     return dto.toProductResponse(result)
@@ -196,7 +228,23 @@ export class ProductService {
     const result = await prisma.products.findMany({
       include: {
         images: true,
-        owner: true
+        owner: true,
+        review: {
+          include: {
+            users: true
+          }
+        },
+        discus: {
+          include: {
+            Users: true,
+            discusType: true,
+            reply: {
+              include: {
+                Users: true
+              }
+            }
+          }
+        }
       }
     })
     return result.map(dto.toProductResponse)
@@ -209,7 +257,23 @@ export class ProductService {
       },
       include: {
         images: true,
-        owner: true
+        owner: true,
+        review: {
+          include: {
+            users: true
+          }
+        },
+        discus: {
+          include: {
+            Users: true,
+            discusType: true,
+            reply: {
+              include: {
+                Users: true
+              }
+            }
+          }
+        }
       }
     })
     if (!result) {
@@ -247,7 +311,23 @@ export class ProductService {
       },
       include: {
         images: true,
-        owner: true
+        owner: true,
+        review: {
+          include: {
+            users: true
+          }
+        },
+        discus: {
+          include: {
+            Users: true,
+            discusType: true,
+            reply: {
+              include: {
+                Users: true
+              }
+            }
+          }
+        }
       },
       take: limit
     })

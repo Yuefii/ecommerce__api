@@ -1,4 +1,12 @@
-import { Images, Products, Users } from '@prisma/client'
+import {
+  Discus,
+  DiscusType,
+  Images,
+  Products,
+  Reply,
+  Reviews,
+  Users
+} from '@prisma/client'
 import { UploadedFile } from 'express-fileupload'
 
 export type ProductResponse = {
@@ -18,7 +26,32 @@ export type ProductResponse = {
     user_id: string
     name: string | null
     username: string | null
-  }
+    avatar: string | null
+  },
+  review: Array<{
+    review_id: string
+    comment: string,
+    rating: number,
+    users: {
+      user_id: string
+      name: string | null
+      username: string | null
+      avatar: string | null
+    },
+  }>
+  discus: Array<{
+    discus_id: string
+    discus_message: string
+    discus_type: Array<{
+      name: string
+    }>
+    discus_reply: Array<{
+      reply_id: string
+      reply_message: string
+      created_at: Date
+    }>
+    created_at: Date
+  }>
   created_at: Date
   updated_at: Date
 }
@@ -59,7 +92,12 @@ export function toProductImagesResponse(image: Images): ProductImagesResponse {
 }
 
 export function toProductResponse(
-  product: Products & { images: Images[]; owner: Users }
+  product: Products & {
+    images: Images[]
+    owner: Users
+    review: (Reviews & { users: Users })[]
+    discus: (Discus & { discusType: DiscusType[]; reply: Reply[] })[]
+  }
 ): ProductResponse {
   return {
     product_id: product.productId,
@@ -77,8 +115,33 @@ export function toProductResponse(
     owner: {
       user_id: product.owner.userId,
       name: product.owner.name,
-      username: product.owner.username
+      username: product.owner.username,
+      avatar: product.owner.imageUrl
     },
+    review: product.review ? product.review.map((item) => ({
+      review_id: item.reviewId,
+      comment: item.comment,
+      rating: item.rating,
+      users: {
+        user_id: item.users.userId,
+        name: item.users.name,
+        username: item.users.username,
+        avatar: item.users.imageUrl
+      }
+    })) : [],
+    discus: product.discus ? product.discus.map((item) => ({
+      discus_id: item.discusId,
+      discus_message: item.message,
+      discus_type: item.discusType.map((item) => ({
+        name: item.name
+      })),
+      discus_reply: item.reply.map((item) => ({
+        reply_id: item.replyId,
+        reply_message: item.message,
+        created_at: item.createdAt
+      })),
+      created_at: item.createdAt
+    })) : [],
     created_at: product.createdAt,
     updated_at: product.updateAt
   }
