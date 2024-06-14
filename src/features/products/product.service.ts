@@ -76,6 +76,7 @@ export class ProductService {
         brand: createRequest.brand,
         price: createRequest.price,
         category: createRequest.category,
+        condition: createRequest.condition,
         images: {
           createMany: {
             data: imgUrl.map((url) => ({
@@ -134,7 +135,8 @@ export class ProductService {
         description: createRequest.description,
         brand: createRequest.brand,
         price: createRequest.price,
-        category: createRequest.category
+        category: createRequest.category,
+        condition: createRequest.condition
       },
       include: {
         images: true,

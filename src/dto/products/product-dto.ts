@@ -16,6 +16,8 @@ export type ProductResponse = {
   price: number
   brand: string
   category: string
+  total_quantity: number
+  condition: string
   images: Array<{
     img_id: string | null
     name: string | null
@@ -83,6 +85,7 @@ export type CreateProductRequest = {
   price: number
   brand: string
   category: string
+  condition: string
   images: UploadedFile[]
 }
 
@@ -117,6 +120,15 @@ export function toProductResponse(
     })[]
   }
 ): ProductResponse {
+  const Images = product.images.map((item) => ({
+    img_id: item.imgId,
+    name: item.name,
+    quantity: item.quantity,
+    img_url: item.url
+  }))
+
+  const totalQuantity = Images.reduce((total, item) => total + item.quantity, 0)
+
   return {
     product_id: product.productId,
     name: product.name,
@@ -124,12 +136,9 @@ export function toProductResponse(
     brand: product.brand,
     price: product.price,
     category: product.category,
-    images: product.images.map((item) => ({
-      img_id: item.imgId,
-      name: item.name,
-      quantity: item.quantity,
-      img_url: item.url
-    })),
+    total_quantity: totalQuantity,
+    condition: product.condition,
+    images: Images,
     owner: {
       user_id: product.owner.userId,
       name: product.owner.name,
