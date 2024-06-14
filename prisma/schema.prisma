@@ -139,6 +139,7 @@ model Products {
   price       Int
   brand       String
   category    String
+  condition   String
   images      Images[]
   discus      Discus[]
   review      Reviews[]

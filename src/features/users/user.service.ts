@@ -135,20 +135,11 @@ export class UserService {
       email: createRequest.email,
       phoneNumber: createRequest.phoneNumber,
       bio: createRequest.bio,
-      gender: ''
+      gender: createRequest.gender
     }
 
     try {
       return await prisma.$transaction(async (prisma) => {
-        if (createRequest.gender) {
-          if (
-            createRequest.gender !== 'pria' &&
-            createRequest.gender !== 'wanita'
-          ) {
-            throw new ResponseError(400, 'Gender must be either pria or wanita')
-          }
-          dataToUpdate.gender = createRequest.gender
-        }
         const addresses =
           createRequest.address && Array.isArray(createRequest.address)
             ? createRequest.address
