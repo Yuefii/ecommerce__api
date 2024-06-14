@@ -39,7 +39,7 @@ export class ProductService {
               expires: '03-01-2050'
             })
             resolve(publicUrl[0])
-          } catch (error: any) {
+          } catch (error) {
             reject(new ResponseError(400, 'Failed to get public URL.'))
           }
         })
@@ -126,6 +126,54 @@ export class ProductService {
       }
     })
     return dto.toProductResponse(result)
+  }
+
+  static async updateImage(
+    productId: string,
+    imgId: string,
+    request: dto.ProductImagesRequest
+  ): Promise<dto.ProductImagesResponse> {
+    const createRequest = Validation.validate(ProductValidation.IMAGE, request)
+    const existingProduct = await prisma.products.findFirst({
+      where: {
+        productId
+      }
+    })
+    if (!existingProduct) {
+      throw new ResponseError(404, `User with id ${productId} not found`)
+    }
+    const existingImg = await prisma.images.findUnique({
+      where: {
+        imgId
+      }
+    })
+    if (!existingImg) {
+      throw new ResponseError(404, `User with id ${imgId} not found`)
+    }
+    let updatedImg = existingImg.url ? [existingImg.url] : []
+
+    if (request.url) {
+      const updatedUrls = Array.isArray(request.url)
+        ? request.url
+        : [request.url]
+      updatedImg = await this.uploadProductImages(updatedUrls)
+    }
+
+    const quantity = createRequest.quantity ?? 0
+    const updatedQuantity = (existingImg.quantity ?? 0) + quantity
+
+    const result = await prisma.images.update({
+      where: {
+        imgId
+      },
+      data: {
+        productId,
+        name: createRequest.name,
+        quantity: updatedQuantity,
+        url: updatedImg.join(',')
+      }
+    })
+    return dto.toProductImagesResponse(result)
   }
 
   static async delete(productId: string) {

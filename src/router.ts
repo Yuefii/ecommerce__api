@@ -7,15 +7,6 @@ export const router = express.Router()
 // grouping /v1/products
 const productsRouter = express.Router()
 router.use('/v1/products', productsRouter)
-// products router
-// productsRouter.get('', products.getAllProductController)
-// productsRouter.get('/search', products.getProductBySearchController)
-// productsRouter.get('/:productId', products.getProductByProductIdController)
-// productsRouter.patch(
-//   '/:productId/owner/:userId/update',
-//   products.updateProductController
-// )
-// productsRouter.delete('/:productId/delete', products.deleteProductController)
 // reviews router
 productsRouter.get('/:productId/review', reviews.getReviewByIdController)
 productsRouter.post('/:productId/review', reviews.createReviewController)

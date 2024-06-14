@@ -48,4 +48,8 @@ privateRouter.patch(
   '/v1/products/:productId/owner/:ownerId/update',
   ProductController.update
 )
+privateRouter.patch(
+  '/v1/products/:productId/images/:imgId/update',
+  ProductController.updateImage
+)
 privateRouter.delete('v1/products/:productId/delete', ProductController.delete)
