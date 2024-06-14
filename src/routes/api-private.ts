@@ -1,10 +1,12 @@
 import express from 'express'
-import { UserController } from '../features/users/user.controller'
+
 import { Auth } from '../middleware/auth'
-import { HistoryController } from '../features/history/history.controller'
+import { UserController } from '../features/users/user.controller'
 import { ChatController } from '../features/chats/chat.controller'
+import { HistoryController } from '../features/history/history.controller'
 import { MessageControler } from '../features/chats/message.controller'
 import { AddressController } from '../features/users/address.controller'
+import { ProductController } from '../features/products/product.controller'
 
 export const privateRouter = express.Router()
 privateRouter.use(Auth)
@@ -40,3 +42,14 @@ privateRouter.post(
   MessageControler.create
 )
 privateRouter.get('/v1/chats/room/:chatId/message', MessageControler.getById)
+// Products
+privateRouter.post('/v1/products/owner/:ownerId', ProductController.create)
+privateRouter.patch(
+  '/v1/products/:productId/owner/:ownerId/update',
+  ProductController.update
+)
+privateRouter.patch(
+  '/v1/products/:productId/images/:imgId/update',
+  ProductController.updateImage
+)
+privateRouter.delete('v1/products/:productId/delete', ProductController.delete)

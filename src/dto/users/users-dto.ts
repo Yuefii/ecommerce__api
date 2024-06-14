@@ -126,7 +126,7 @@ export function toUserResponse(
     })),
     products: user.products.map((item) => ({
       product_id: item.productId,
-      name: item.nama,
+      name: item.name,
       category: item.category
     })),
     created_at: user.createdAt,
