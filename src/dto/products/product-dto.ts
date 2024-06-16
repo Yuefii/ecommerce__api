@@ -79,14 +79,17 @@ export type ProductImagesResponse = {
 }
 
 export type CreateProductRequest = {
-  ownerId: string
   name: string
   description: string
   price: number
   brand: string
   category: string
   condition: string
-  images: UploadedFile[]
+  images: {
+    base64Data: string;
+    name?: string;
+    quantity?: number;
+  }[];
 }
 
 export type ProductImagesRequest = {

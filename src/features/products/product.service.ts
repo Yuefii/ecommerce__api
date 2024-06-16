@@ -2,6 +2,7 @@ import path from 'path'
 import prisma from '../../libs/prisma'
 import * as dto from '../../dto/products/product-dto'
 
+import { v4 as uuidv4 } from 'uuid';
 import { bucket } from '../../libs/firebase'
 import { Validation } from '../../utils/validation'
 import { UploadedFile } from 'express-fileupload'
@@ -9,65 +10,81 @@ import { ResponseError } from '../../error/response-error'
 import { ProductValidation } from '../../validation/product-validation'
 
 export class ProductService {
-  static async uploadProductImages(
-    imageFiles: UploadedFile[]
-  ): Promise<string[]> {
-    if (!imageFiles || imageFiles.length === 0) {
-      throw new ResponseError(400, 'No files uploaded')
+  static async uploadBase64Images(base64Images: string[]): Promise<string[]> {
+    if (!base64Images || base64Images.length === 0) {
+      throw new ResponseError(400, 'No base64 images provided');
     }
 
-    const uploadPromises = imageFiles.map(async (imageFile) => {
-      const fileExtension = path.extname(imageFile.name)
-      const fileName = `${Date.now()}${fileExtension}`
-      const blob = bucket.file(`product_images/${fileName}`)
+    const uploadPromises = base64Images.map(async (base64Image) => {
+      const fileName = `${uuidv4()}.png`; // Ubah ekstensi sesuai dengan jenis gambar yang diharapkan
+      const base64Data = base64Image.replace(/^data:image\/png;base64,/, ''); // Ganti sesuai dengan jenis gambar yang diharapkan
+      const fileBuffer = Buffer.from(base64Data, 'base64');
+
+      const blob = bucket.file(`product_images/${fileName}`);
       const blobStream = blob.createWriteStream({
         metadata: {
-          contentType: imageFile.mimetype
-        }
-      })
+          contentType: 'image/png', // Ganti sesuai dengan jenis gambar yang diharapkan
+        },
+      });
 
       return new Promise<string>((resolve, reject) => {
         blobStream.on('error', (err) => {
-          console.error('Blob stream error:', err)
-          reject(new ResponseError(400, 'Failed to upload image'))
-        })
+          console.error('Blob stream error:', err);
+          reject(new ResponseError(400, 'Failed to upload image'));
+        });
 
         blobStream.on('finish', async () => {
           try {
             const publicUrl = await blob.getSignedUrl({
               action: 'read',
-              expires: '03-01-2050'
-            })
-            resolve(publicUrl[0])
+              expires: '03-01-2050',
+            });
+            resolve(publicUrl[0]);
           } catch (error) {
-            reject(new ResponseError(400, 'Failed to get public URL.'))
+            reject(new ResponseError(400, 'Failed to get public URL.'));
           }
-        })
+        });
 
-        blobStream.end(imageFile.data)
-      })
-    })
+        blobStream.end(fileBuffer);
+      });
+    });
 
-    return Promise.all(uploadPromises)
+    return Promise.all(uploadPromises);
   }
 
   static async create(
     ownerId: string,
     request: dto.CreateProductRequest
   ): Promise<dto.ProductResponse> {
-    const createRequest = Validation.validate(ProductValidation.CREATE, request)
+    const createRequest = Validation.validate(ProductValidation.CREATE, request);
     const userExist = await prisma.users.findFirst({
       where: {
-        userId: ownerId
-      }
-    })
+        userId: ownerId,
+      },
+    });
     if (!userExist) {
-      throw new ResponseError(404, `User with id ${ownerId} not found`)
+      throw new ResponseError(404, `User with id ${ownerId} not found`);
     }
-    let imgUrl: string[] = []
+  
+    let imgUrl: string[] = [];
+    let imageDetails: { name: string; quantity: number }[] = [];
+  
     if (request.images && request.images.length > 0) {
-      imgUrl = await this.uploadProductImages(request.images)
+      const base64Images: string[] = [];
+  
+      request.images.forEach((imageRequest) => {
+        base64Images.push(imageRequest.base64Data); // Ambil base64Data dari input
+        imageDetails.push({
+          name: imageRequest.name || '',
+          quantity: imageRequest.quantity || 0,
+        });
+      });
+  
+      if (base64Images.length > 0) {
+        imgUrl = await this.uploadBase64Images(base64Images);
+      }
     }
+  
     const result = await prisma.products.create({
       data: {
         ownerId,
@@ -79,21 +96,21 @@ export class ProductService {
         condition: createRequest.condition,
         images: {
           createMany: {
-            data: imgUrl.map((url) => ({
+            data: imgUrl.map((url, index) => ({
               url,
-              name: '',
-              quantity: 0
-            }))
-          }
-        }
+              name: imageDetails[index].name || '',
+              quantity: imageDetails[index].quantity || 0,
+            })),
+          },
+        },
       },
       include: {
         images: true,
         owner: true,
         review: {
           include: {
-            users: true
-          }
+            users: true,
+          },
         },
         discus: {
           include: {
@@ -101,14 +118,15 @@ export class ProductService {
             discusType: true,
             reply: {
               include: {
-                Users: true
-              }
-            }
-          }
-        }
-      }
-    })
-    return dto.toProductResponse(result)
+                Users: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  
+    return dto.toProductResponse(result);
   }
 
   static async update(
@@ -208,6 +226,9 @@ export class ProductService {
       }
     })
     return dto.toProductImagesResponse(result)
+  }
+  static uploadProductImages(updatedUrls: UploadedFile[]): string[] | PromiseLike<string[]> {
+    throw new Error('Method not implemented.');
   }
 
   static async delete(productId: string) {
