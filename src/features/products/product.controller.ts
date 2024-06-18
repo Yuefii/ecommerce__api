@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { ProductService } from './product.service'
 
 import * as dto from '../../dto/products/product-dto'
+import { UploadedFile } from 'express-fileupload'
 
 export class ProductController {
   static async create(req: Request, res: Response, next: NextFunction) {
@@ -36,13 +37,13 @@ export class ProductController {
 
   static async updateImage(req: Request, res: Response, next: NextFunction) {
     try {
-      const { productId, imgId } = req.params
-      const request: dto.ProductImagesRequest =
-        req.body as dto.ProductImagesRequest
-      const response = await ProductService.updateImage(
+      const { productId } = req.params
+      const { imgIds } = req.body
+      const urls = req.files?.urls as UploadedFile[]
+      const response = await ProductService.uploadImages(
         productId,
-        imgId,
-        request
+        imgIds,
+        urls
       )
       res.status(200).json({
         message: 'Successfully',

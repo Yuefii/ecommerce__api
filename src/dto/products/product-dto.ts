@@ -7,7 +7,6 @@ import {
   Reviews,
   Users
 } from '@prisma/client'
-import { UploadedFile } from 'express-fileupload'
 
 export type ProductResponse = {
   product_id: string
@@ -19,8 +18,8 @@ export type ProductResponse = {
   total_quantity: number
   condition: string
   images: Array<{
-    img_id: string | null
-    name: string | null
+    img_id: string
+    name: string
     quantity: number | 0
     img_url: string | null
   }>
@@ -70,42 +69,19 @@ export type ProductResponse = {
   updated_at: Date
 }
 
-export type ProductImagesResponse = {
-  img_id: string
-  product_id: string
-  name: string
-  quantity: number
-  img_url: string
-}
-
 export type CreateProductRequest = {
+  ownerId: string
   name: string
   description: string
   price: number
   brand: string
   category: string
   condition: string
-  images: {
-    base64Data: string;
-    name?: string;
-    quantity?: number;
-  }[];
-}
-
-export type ProductImagesRequest = {
-  imgId: string
-  name?: string
-  quantity?: number
-  url?: UploadedFile | UploadedFile[]
-}
-
-export function toProductImagesResponse(image: Images): ProductImagesResponse {
-  return {
-    img_id: image.imgId,
-    product_id: image.productId,
-    name: image.name,
-    quantity: image.quantity,
-    img_url: image.url
+  images?: {
+    create: Array<{
+      name: string
+      quantity: number
+    }>
   }
 }
 
@@ -150,43 +126,43 @@ export function toProductResponse(
     },
     review: product.review
       ? product.review.map((item) => ({
-        review_id: item.reviewId,
-        comment: item.comment,
-        rating: item.rating,
-        users: {
-          user_id: item.users.userId,
-          name: item.users.name,
-          username: item.users.username,
-          avatar: item.users.imageUrl
-        }
-      }))
+          review_id: item.reviewId,
+          comment: item.comment,
+          rating: item.rating,
+          users: {
+            user_id: item.users.userId,
+            name: item.users.name,
+            username: item.users.username,
+            avatar: item.users.imageUrl
+          }
+        }))
       : [],
     discus: product.discus
       ? product.discus.map((item) => ({
-        discus_id: item.discusId,
-        discus_message: item.message,
-        // users: {
-        //   user_id: item.users.userId,
-        //   name: item.users.name,
-        //   username: item.users.username,
-        //   avatar: item.users.imageUrl
-        // },
-        discus_type: item.discusType.map((item) => ({
-          name: item.name
-        })),
-        discus_reply: item.reply.map((item) => ({
-          reply_id: item.replyId,
-          reply_message: item.message,
+          discus_id: item.discusId,
+          discus_message: item.message,
           // users: {
           //   user_id: item.users.userId,
           //   name: item.users.name,
           //   username: item.users.username,
           //   avatar: item.users.imageUrl
           // },
+          discus_type: item.discusType.map((item) => ({
+            name: item.name
+          })),
+          discus_reply: item.reply.map((item) => ({
+            reply_id: item.replyId,
+            reply_message: item.message,
+            // users: {
+            //   user_id: item.users.userId,
+            //   name: item.users.name,
+            //   username: item.users.username,
+            //   avatar: item.users.imageUrl
+            // },
+            created_at: item.createdAt
+          })),
           created_at: item.createdAt
-        })),
-        created_at: item.createdAt
-      }))
+        }))
       : [],
     created_at: product.createdAt,
     updated_at: product.updateAt

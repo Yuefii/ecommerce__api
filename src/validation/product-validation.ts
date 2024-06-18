@@ -7,7 +7,15 @@ export class ProductValidation {
     price: z.number().min(0),
     brand: z.string(),
     category: z.string(),
-    condition: z.string()
+    condition: z.string(),
+    images: z
+      .array(
+        z.object({
+          name: z.string().optional(),
+          quantity: z.number().min(0).optional()
+        })
+      )
+      .optional()
   })
   static readonly UPDATE: ZodType = z.object({
     name: z.string().optional(),
@@ -15,10 +23,14 @@ export class ProductValidation {
     price: z.number().min(0).optional(),
     brand: z.string().optional(),
     category: z.string().optional(),
-    condition: z.string().optional()
-  })
-  static readonly IMAGE: ZodType = z.object({
-    name: z.string().optional(),
-    quantity: z.number().optional()
+    condition: z.string().optional(),
+    images: z
+      .array(
+        z.object({
+          name: z.string().optional(),
+          quantity: z.number().min(0).optional()
+        })
+      )
+      .optional()
   })
 }

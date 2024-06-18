@@ -49,7 +49,7 @@ privateRouter.patch(
   ProductController.update
 )
 privateRouter.patch(
-  '/v1/products/:productId/images/:imgId/update',
+  '/v1/products/:productId/upload-images',
   ProductController.updateImage
 )
-privateRouter.delete('v1/products/:productId/delete', ProductController.delete)
+privateRouter.delete('/v1/products/:productId/delete', ProductController.delete)
