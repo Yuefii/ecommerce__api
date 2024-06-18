@@ -88,6 +88,7 @@ export class ProductService {
     if (!userExist) {
       throw new ResponseError(404, `User with id ${request.ownerId} not found`)
     }
+
     const productData: dto.CreateProductRequest = {
       ownerId,
       name: createRequest.name,
