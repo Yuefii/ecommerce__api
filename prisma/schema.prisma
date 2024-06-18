@@ -157,7 +157,7 @@ model Images {
   productId String @db.ObjectId
   name      String
   quantity  Int
-  url       String
+  url       String?
 
   // Relational
   product Products @relation(fields: [productId], references: [productId], onDelete: Cascade)
