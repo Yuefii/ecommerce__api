@@ -16,16 +16,16 @@ export class ProductService {
     body: any,
     files: UploadedFile[]
   ): Promise<dto.ProductResponse> {
-
-    const createRequest = Validation.validate(ProductValidation.CREATE, request);
     const userExist = await prisma.users.findFirst({
       where: {
         userId: ownerId
       }
     });
     if (!userExist) {
-      throw new ResponseError(404, `User with id ${ownerId} not found`);
+      throw new ResponseError(404, `User dengan id ${ownerId} tidak ditemukan`);
     }
+
+    const createRequest = Validation.validate(ProductValidation.CREATE, request);
 
     const productData: dto.CreateProductRequest = {
       ownerId,
@@ -38,7 +38,6 @@ export class ProductService {
     };
 
     const images: any[] = [];
-
     for (const key in body) {
       if (key.startsWith('images[')) {
         const match = key.match(/images\[(\d+)\]\[(\w+)\]/);
@@ -56,60 +55,58 @@ export class ProductService {
     }
 
     const publicUrls: string[] = [];
-
     const filesArray = Object.values(files);
 
-    const result = await prisma.$transaction(async (prisma) => {
-      for (let i = 0; i < filesArray.length; i++) {
-        const file = filesArray[i];
-        const fileExtension = path.extname(file.name);
-        const fileName = `${uuidv4()}${fileExtension}`;
-        const blob = bucket.file(`profile_photos/${fileName}`);
-        const blobStream = blob.createWriteStream({
-          metadata: {
-            contentType: file.mimetype
+    await Promise.all(filesArray.map(async (file) => {
+      const fileExtension = path.extname(file.name);
+      const fileName = `${uuidv4()}${fileExtension}`;
+      const blob = bucket.file(`profile_photos/${fileName}`);
+      const blobStream = blob.createWriteStream({
+        metadata: {
+          contentType: file.mimetype
+        }
+      });
+
+      await new Promise((resolve, reject) => {
+        blobStream.on('error', (err) => {
+          console.error('Error aliran blob:', err);
+          reject(new ResponseError(400, 'Gagal mengunggah gambar'));
+        });
+
+        blobStream.on('finish', async () => {
+          const publicUrl = await blob.getSignedUrl({
+            action: 'read',
+            expires: '03-01-2050'
+          });
+
+          publicUrls.push(publicUrl[0]);
+
+          const imgIndex = images.findIndex(img => img.image === file.name);
+          if (imgIndex !== -1) {
+            images[imgIndex].image = publicUrl[0];
           }
+
+          resolve(publicUrl[0]);
         });
 
-        await new Promise((resolve, reject) => {
-          blobStream.on('error', (err) => {
-            console.error('Blob stream error:', err);
-            reject(new ResponseError(400, 'Failed to upload image'));
-          });
+        blobStream.end(file.data);
+      });
+    }));
 
-          blobStream.on('finish', async () => {
-            const publicUrl = await blob.getSignedUrl({
-              action: 'read',
-              expires: '03-01-2050'
-            });
+    const imagesData = images.map((img, index) => ({
+      url: publicUrls[index],
+      name: img.name,
+      quantity: parseInt(img.quantity, 10)
+    }));
 
-            publicUrls.push(publicUrl[0]);
-
-            const imgIndex = images.findIndex(img => img.image === file.name);
-            if (imgIndex !== -1) {
-              images[imgIndex].image = publicUrl[0];
-            }
-
-            resolve(publicUrl[0]);
-          });
-
-          blobStream.end(file.data);
-        });
-      }
-
-      const imagesData = images.map((img, index) => ({
-        url: publicUrls[index],
-        name: img.name,
-        quantity: parseInt(img.quantity, 10)
-      }));
-
-      if (imagesData.length > 0) {
-        productData.images = {
-          create: imagesData
-        };
-      }
-      const result = await prisma.products.create({
-        data: productData,
+    const result = await prisma.$transaction(async (prisma) => {
+      const createdProduct = await prisma.products.create({
+        data: {
+          ...productData,
+          images: {
+            create: imagesData
+          },
+        },
         include: {
           images: true,
           owner: true,
@@ -132,10 +129,12 @@ export class ProductService {
         }
       });
 
-      return dto.toProductResponse(result);
+      return dto.toProductResponse(createdProduct);
     });
+
     return result;
   }
+
 
   static async update(
     productId: string,
@@ -151,7 +150,7 @@ export class ProductService {
     if (!userExist) {
       throw new ResponseError(404, `User with id ${request.ownerId} not found`)
     }
-      
+
     const productData: dto.CreateProductRequest = {
       ownerId,
       name: createRequest.name,
