@@ -3,7 +3,6 @@ import { ProductService } from './product.service'
 import { NextFunction, Request, Response } from 'express'
 
 import * as dto from '../../dto/products/product-dto'
-import { UploadedFile } from 'express-fileupload'
 
 export class ProductController {
   static async create(req: Request, res: Response, next: NextFunction) {
