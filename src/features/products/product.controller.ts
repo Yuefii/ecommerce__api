@@ -1,5 +1,6 @@
-import { NextFunction, Request, Response } from 'express'
+import { UploadedFile } from 'express-fileupload'
 import { ProductService } from './product.service'
+import { NextFunction, Request, Response } from 'express'
 
 import * as dto from '../../dto/products/product-dto'
 import { UploadedFile } from 'express-fileupload'
@@ -7,16 +8,28 @@ import { UploadedFile } from 'express-fileupload'
 export class ProductController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { ownerId } = req.params
-      const request: dto.CreateProductRequest =
-        req.body as dto.CreateProductRequest
-      const response = await ProductService.create(ownerId, request)
+      const { ownerId } = req.params;
+      const files = req.files as unknown as UploadedFile[];
+      const body = req.body;
+      const price = parseFloat(body.price);
+
+      const request: dto.CreateProductRequest = {
+        ownerId,
+        name: body.name,
+        description: body.description,
+        brand: body.brand,
+        price,
+        category: body.category,
+        condition: body.condition
+      };
+
+      const response = await ProductService.create(ownerId, request, body, files);
       res.status(201).json({
         message: 'Successfully',
         data: response
-      })
+      });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
