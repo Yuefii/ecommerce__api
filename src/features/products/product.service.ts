@@ -46,7 +46,7 @@ export class ProductService {
           const imgIndex = parseInt(index, 10);
 
           if (!images[imgIndex]) {
-            images[imgIndex] = { image: null, name: '', quantity: '' };
+            images[imgIndex] = { image: null, name: '', quantity: '', order: '' };
           }
 
           images[imgIndex][field] = body[key];
@@ -96,7 +96,8 @@ export class ProductService {
     const imagesData = images.map((img, index) => ({
       url: publicUrls[index],
       name: img.name,
-      quantity: parseInt(img.quantity, 10)
+      quantity: parseInt(img.quantity, 10),
+      order: parseInt(img.order, 10)
     }));
 
     const result = await prisma.$transaction(async (prisma) => {
@@ -136,91 +137,91 @@ export class ProductService {
   }
 
 
-  static async update(
-    productId: string,
-    ownerId: string,
-    request: dto.CreateProductRequest
-  ): Promise<dto.ProductResponse> {
-    const createRequest = Validation.validate(ProductValidation.UPDATE, request)
-    const userExist = await prisma.users.findFirst({
-      where: {
-        userId: ownerId
-      }
-    })
-    if (!userExist) {
-      throw new ResponseError(404, `User with id ${request.ownerId} not found`)
-    }
+  // static async update(
+  //   productId: string,
+  //   ownerId: string,
+  //   request: dto.CreateProductRequest
+  // ): Promise<dto.ProductResponse> {
+  //   const createRequest = Validation.validate(ProductValidation.UPDATE, request)
+  //   const userExist = await prisma.users.findFirst({
+  //     where: {
+  //       userId: ownerId
+  //     }
+  //   })
+  //   if (!userExist) {
+  //     throw new ResponseError(404, `User with id ${request.ownerId} not found`)
+  //   }
 
-    const productData: dto.CreateProductRequest = {
-      ownerId,
-      name: createRequest.name,
-      description: createRequest.description,
-      brand: createRequest.brand,
-      price: createRequest.price,
-      category: createRequest.category,
-      condition: createRequest.condition
-    }
+  //   const productData: dto.CreateProductRequest = {
+  //     ownerId,
+  //     name: createRequest.name,
+  //     description: createRequest.description,
+  //     brand: createRequest.brand,
+  //     price: createRequest.price,
+  //     category: createRequest.category,
+  //     condition: createRequest.condition
+  //   }
 
-    return await prisma.$transaction(async (prisma) => {
-      const imagesData =
-        createRequest.images && Array.isArray(createRequest.images)
-          ? createRequest.images
-          : []
+  //   return await prisma.$transaction(async (prisma) => {
+  //     const imagesData =
+  //       createRequest.images && Array.isArray(createRequest.images)
+  //         ? createRequest.images
+  //         : []
 
-      for (const img of imagesData) {
-        if (img.imgId) {
-          await prisma.images.update({
-            where: { imgId: img.imgId },
-            data: {
-              name: img.name,
-              quantity: img.quantity
-            }
-          })
-        }
-      }
+  //     for (const img of imagesData) {
+  //       if (img.imgId) {
+  //         await prisma.images.update({
+  //           where: { imgId: img.imgId },
+  //           data: {
+  //             name: img.name,
+  //             quantity: img.quantity
+  //           }
+  //         })
+  //       }
+  //     }
 
-      const newImages = imagesData
-        .filter((img) => !img.imgId)
-        .map((img) => ({
-          name: img.name,
-          quantity: img.quantity
-        }))
+  //     const newImages = imagesData
+  //       .filter((img) => !img.imgId)
+  //       .map((img) => ({
+  //         name: img.name,
+  //         quantity: img.quantity
+  //       }))
 
-      if (newImages.length > 0) {
-        productData.images = {
-          create: newImages
-        }
-      }
+  //     if (newImages.length > 0) {
+  //       productData.images = {
+  //         create: newImages
+  //       }
+  //     }
 
-      const result = await prisma.products.update({
-        where: {
-          productId
-        },
-        data: productData,
-        include: {
-          images: true,
-          owner: true,
-          review: {
-            include: {
-              users: true
-            }
-          },
-          discus: {
-            include: {
-              Users: true,
-              discusType: true,
-              reply: {
-                include: {
-                  Users: true
-                }
-              }
-            }
-          }
-        }
-      })
-      return dto.toProductResponse(result)
-    })
-  }
+  //     const result = await prisma.products.update({
+  //       where: {
+  //         productId
+  //       },
+  //       data: productData,
+  //       include: {
+  //         images: true,
+  //         owner: true,
+  //         review: {
+  //           include: {
+  //             users: true
+  //           }
+  //         },
+  //         discus: {
+  //           include: {
+  //             Users: true,
+  //             discusType: true,
+  //             reply: {
+  //               include: {
+  //                 Users: true
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     })
+  //     return dto.toProductResponse(result)
+  //   })
+  // }
 
   static async uploadImages(
     productId: string,
@@ -323,7 +324,11 @@ export class ProductService {
   static async getAll(): Promise<dto.ProductResponse[]> {
     const result = await prisma.products.findMany({
       include: {
-        images: true,
+        images: {
+          orderBy: {
+            order: 'asc'
+          }
+        },
         owner: true,
         review: {
           include: {
@@ -352,7 +357,11 @@ export class ProductService {
         productId
       },
       include: {
-        images: true,
+        images: {
+          orderBy: {
+            order: 'asc'
+          }
+        },
         owner: true,
         review: {
           include: {
@@ -406,7 +415,11 @@ export class ProductService {
         ]
       },
       include: {
-        images: true,
+        images: {
+          orderBy: {
+            order: 'asc'
+          }
+        },
         owner: true,
         review: {
           include: {

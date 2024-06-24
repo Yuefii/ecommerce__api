@@ -153,11 +153,12 @@ model Products {
 }
 
 model Images {
-  imgId     String @id @default(auto()) @map("_id") @db.ObjectId
-  productId String @db.ObjectId
+  imgId     String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId String  @db.ObjectId
   name      String
   quantity  Int
   url       String?
+  order     Int
 
   // Relational
   product Products @relation(fields: [productId], references: [productId], onDelete: Cascade)

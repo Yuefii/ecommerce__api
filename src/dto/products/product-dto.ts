@@ -22,6 +22,7 @@ export type ProductResponse = {
     name: string
     quantity: number | 0
     img_url: string | null
+    order: number | 1
   }>
   owner: {
     user_id: string
@@ -103,7 +104,8 @@ export function toProductResponse(
     img_id: item.imgId,
     name: item.name,
     quantity: item.quantity,
-    img_url: item.url
+    img_url: item.url,
+    order: item.order
   }))
 
   const totalQuantity = Images.reduce((total, item) => total + item.quantity, 0)
